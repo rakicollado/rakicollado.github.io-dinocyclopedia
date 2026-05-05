@@ -11,58 +11,65 @@
 
 <style>
   .font-display {
-  font-family: 'DM Serif Display', Georgia, serif;
-}
+    font-family: 'DM Serif Display', Georgia, serif;
+  }
 
-.font-mono {
-  font-family: 'DM Mono', monospace;
-}
+  .font-mono {
+    font-family: 'DM Mono', monospace;
+  }
 
-.navbar {
-  border-bottom: 1px solid #000;
-}
+  .navbar {
+    border-bottom: 1px solid #000;
+  }
 
-.wordmark {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.7rem;
-  letter-spacing: -0.02em;
-}
+  .wordmark {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem;
+    letter-spacing: -0.02em;
+  }
 
-.wordmark em {
-  font-style: italic;
-}
+  .wordmark em {
+    font-style: italic;
+  }
 
-#search {
-  border: 1px solid #000;
-  border-right: none;
-  border-radius: 4px 0 0 4px;
-}
+  #search {
+    border: 1px solid #000;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+  }
 
-#search:focus {
-  box-shadow: none;
-  border-color: #000;
-}
+  #search:focus {
+    box-shadow: none;
+    border-color: #000;
+  }
 
-.btn-search {
-  border-radius: 0 4px 4px 0;
-  font-family: 'DM Mono', monospace;
-  font-size: .75rem;
-  letter-spacing: .06em;
-}
+  .btn-search {
+    border-radius: 0 4px 4px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: .75rem;
+    letter-spacing: .06em;
+  }
 
-#state .state-icon {
-  font-size: 3rem;
-  animation: pulse 1.6s ease-in-out infinite;
-}
+  #state .state-icon {
+    font-size: 3rem;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
 
-#state.error .state-icon {
-  animation: none;
-}
+  #state.error .state-icon {
+    animation: none;
+  }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1 }
-  50%       { opacity: .25 }
-}
+  @keyframes pulse {
+
+    0%,
+    100% {
+      opacity: 1
+    }
+
+    50% {
+      opacity: .25
+    }
+  }
 </style>
 
 <body>
@@ -73,13 +80,8 @@
       <span id="count" class="font-mono text-secondary d-none d-md-inline"
         style="font-size:.75rem; white-space:nowrap;"></span>
       <div class="input-group" style="max-width:320px;">
-        <input
-          id="search"
-          type="text"
-          class="form-control form-control-sm bg-white"
-          placeholder="Search dinosaurs..."
-          autocomplete="off"
-        />
+        <input id="search" type="text" class="form-control form-control-sm bg-white" placeholder="Search dinosaurs..."
+          autocomplete="off" />
         <button class="btn btn-dark btn-sm btn-search">SEARCH</button>
       </div>
     </div>
@@ -87,49 +89,42 @@
 
   <main class="container-xl py-4 px-3 px-md-4" style="min-height:80vh;">
 
-  <div
-    class="d-flex flex-column align-items-center justify-content-center py-5 text-center"
-    style="min-height:50vh;"
-  >
-    <h2 class="font-display fs-3 mb-2">Loading Dinocyclopedia...</h2>
-    <p class="text-muted" style="max-width:26rem; font-size:.9rem;">
-      Fetching specimens from the Mesozoic archives.
-    </p>
-  </div>
+    <div class="d-flex flex-column align-items-center justify-content-center py-5 text-center" style="min-height:50vh;">
+      <h2 class="font-display fs-3 mb-2">Loading Dinocyclopedia...</h2>
+      <p class="text-muted" style="max-width:26rem; font-size:.9rem;">
+        Fetching specimens from the Mesozoic archives.
+      </p>
+    </div>
 
-  <div
-    class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3"
-    style="display:none;"
-  ></div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3" style="display:none;"></div>
 
-  <div class="text-center py-5" style="display:none;">
-    <p class="font-display fs-2 text-secondary">No dinosaurs found.</p>
-    <small class="text-muted">Try a different search term.</small>
-  </div>
+    <div class="text-center py-5" style="display:none;">
+      <p class="font-display fs-2 text-secondary">No dinosaurs found.</p>
+      <small class="text-muted">Try a different search term.</small>
+    </div>
 
-</main>
+  </main>
 
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-    crossorigin="anonymous"
-  ></script>
+    crossorigin="anonymous"></script>
 
-<script>
-const API = "https://dinosaur-facts-api.shultzlab.com/dinosaurs";
+  <script>
+      const API = 'https://dinosaur-facts-api.shultzlab.com/dinosaurs';
 
-const fetchDinosaurs = async () => {
-  try {
-    const res = await fetch(API);
-    const data = await res.json();
-    console.log(data);
-  } catch (err) {
-    console.error(err);
-  }
-};
+    const fetchDinosaurs = async () => {
+      try {
+        const res = await fetch(API);
+        const data = await res.json();
+        console.log(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-fetchDinosaurs();
-</script>
+    fetchDinosaurs();
+  </script>
 
 </body>
+
 </html>
