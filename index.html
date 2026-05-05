@@ -109,21 +109,38 @@
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
     crossorigin="anonymous"></script>
 
-  <script>
-      const API = 'https://dinosaur-facts-api.shultzlab.com/dinosaurs';
+<script>
+  const API = 'https://dinosaur-facts-api.shultzlab.com/dinosaurs';
+  let allDinos = [];
 
-    const fetchDinosaurs = async () => {
-      try {
-        const res = await fetch(API);
-        const data = await res.json();
-        console.log(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  const norm = (d) => ({
+    name:        d.name        || d.Name        || 'Unknown',
+    image:       d.image       || d.Image       || d.imageUrl || d.img || '',
+    description: d.description || d.Description || d.info     || '',
+    diet:        (d.diet       || d.Diet        || 'unknown').toLowerCase(),
+    period:      d.period      || d.Period      || d.era      || '',
+  });
 
-    fetchDinosaurs();
-  </script>
+  const esc = (s) =>
+    String(s)
+      .replace(/&/g,  '&amp;')
+      .replace(/</g,  '&lt;')
+      .replace(/>/g,  '&gt;')
+      .replace(/"/g,  '&quot;');
+
+  const fetchDinosaurs = async () => {
+    const res  = await fetch(API);
+    const data = await res.json();
+    const raw  = Array.isArray(data) ? data : (data.dinosaurs || Object.values(data));
+
+    allDinos = raw.sort((a, b) => norm(a).name.localeCompare(norm(b).name));
+
+    console.log('✅ Normalized sample:', norm(allDinos[0]));
+    console.log('📦 Total specimens:', allDinos.length);
+  }
+
+  fetchDinosaurs();
+</script>
 
 </body>
 
