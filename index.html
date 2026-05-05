@@ -116,16 +116,19 @@
   ></script>
 
 <script>
-  const API = 'https://restasaurus.herokuapp.com/api/dinosaurs';
+const API = "https://dinosaur-facts-api.shultzlab.com/dinosaurs";
 
-  const fetchDinosaurs = async () => {
+const fetchDinosaurs = async () => {
+  try {
     const res = await fetch(API);
     const data = await res.json();
-
     console.log(data);
+  } catch (err) {
+    console.error(err);
   }
+};
 
-  fetchDinosaurs();
+fetchDinosaurs();
 </script>
 
 </body>
