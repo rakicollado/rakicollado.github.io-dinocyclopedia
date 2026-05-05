@@ -115,5 +115,18 @@
     crossorigin="anonymous"
   ></script>
 
+<script>
+  const API = 'https://dinosaur-facts-api.shorthillsai.com/dinosaurs';
+
+  const fetchDinosaurs = async () => {
+    const res = await fetch(API);
+    const data = await res.json();
+
+    console.log(data);
+  }
+
+  fetchDinosaurs();
+</script>
+
 </body>
 </html>
