@@ -116,33 +116,13 @@
   ></script>
 
 <script>
-  const API = 'https://cheetah.amogus.workers.dev/https://dinosaur-facts-api.shorthillsai.com/dinosaurs';
-  let allDinos = [];
-
-  const norm = (d) => ({
-    name:        d.name        || d.Name        || 'Unknown',
-    image:       d.wikimediaURL|| d.image       || d.Image || d.imageUrl || d.img || '',
-    description: d.description || d.Description || d.info  || '',
-    diet:        (d.diet       || d.Diet        || 'unknown').toLowerCase(),
-    period:      d.period      || d.Period      || d.era   || '',
-  });
-
-  const esc = (s) =>
-    String(s)
-      .replace(/&/g,  '&amp;')
-      .replace(/</g,  '&lt;')
-      .replace(/>/g,  '&gt;')
-      .replace(/"/g,  '&quot;');
+  const API = 'https://restasaurus.herokuapp.com/api/dinosaurs';
 
   const fetchDinosaurs = async () => {
-    const res  = await fetch(API);
+    const res = await fetch(API);
     const data = await res.json();
-    const raw  = Array.isArray(data) ? data : (data.dinosaurs || Object.values(data));
 
-    allDinos = raw.sort((a, b) => norm(a).name.localeCompare(norm(b).name));
-
-    console.log('✅ Normalized sample:', norm(allDinos[0]));
-    console.log('📦 Total specimens:', allDinos.length);
+    console.log(data);
   }
 
   fetchDinosaurs();
