@@ -49,6 +49,20 @@
   font-size: .75rem;
   letter-spacing: .06em;
 }
+
+#state .state-icon {
+  font-size: 3rem;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+#state.error .state-icon {
+  animation: none;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1 }
+  50%       { opacity: .25 }
+}
 </style>
 
 <body>
@@ -70,6 +84,30 @@
       </div>
     </div>
   </nav>
+
+  <main class="container-xl py-4 px-3 px-md-4" style="min-height:80vh;">
+
+  <div
+    class="d-flex flex-column align-items-center justify-content-center py-5 text-center"
+    style="min-height:50vh;"
+  >
+    <h2 class="font-display fs-3 mb-2">Loading Dinocyclopedia...</h2>
+    <p class="text-muted" style="max-width:26rem; font-size:.9rem;">
+      Fetching specimens from the Mesozoic archives.
+    </p>
+  </div>
+
+  <div
+    class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3"
+    style="display:none;"
+  ></div>
+
+  <div class="text-center py-5" style="display:none;">
+    <p class="font-display fs-2 text-secondary">No dinosaurs found.</p>
+    <small class="text-muted">Try a different search term.</small>
+  </div>
+
+</main>
 
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
