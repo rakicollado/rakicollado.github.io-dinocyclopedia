@@ -72,82 +72,82 @@
   }
 
   .dino-card {
-  border: 1px solid #000 !important;
-  border-radius: 6px;
-  overflow: hidden;
-  animation: rise .35s ease forwards;
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-@keyframes rise {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+    border: 1px solid #000 !important;
+    border-radius: 6px;
+    overflow: hidden;
+    animation: rise .35s ease forwards;
+    opacity: 0;
+    transform: translateY(10px);
   }
-}
 
-.dino-card .card-img-top {
-  filter: grayscale(100%);
-  object-fit: cover;
-  height: 190px;
-  transition: transform .4s ease;
-  border-bottom: 1px solid #000;
-}
+  @keyframes rise {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-.dino-card:hover .card-img-top {
-  transform: scale(1.04);
-}
+  .dino-card .card-img-top {
+    filter: grayscale(100%);
+    object-fit: cover;
+    height: 190px;
+    transition: transform .4s ease;
+    border-bottom: 1px solid #000;
+  }
 
-.img-placeholder {
-  height: 190px;
-  background: #f5f5f5;
-  border-bottom: 1px solid #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.5rem;
-  color: #ccc;
-}
+  .dino-card:hover .card-img-top {
+    transform: scale(1.04);
+  }
 
-.card-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.2rem;
-  letter-spacing: -.02em;
-}
+  .img-placeholder {
+    height: 190px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #ccc;
+  }
 
-.card-text {
-  font-size: .82rem;
-  color: #444;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    letter-spacing: -.02em;
+  }
 
-.badge-tag {
-  font-family: 'DM Mono', monospace;
-  font-size: .65rem;
-  letter-spacing: .04em;
-  font-weight: 400;
-  border-radius: 99px;
-  border: 1px solid #000;
-  padding: .25rem .55rem;
-}
+  .card-text {
+    font-size: .82rem;
+    color: #444;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 
-.badge-carnivore {
-  background: #000;
-  color: #fff;
-}
+  .badge-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .04em;
+    font-weight: 400;
+    border-radius: 99px;
+    border: 1px solid #000;
+    padding: .25rem .55rem;
+  }
 
-.badge-herbivore {
-  background: #fff;
-  color: #000;
-}
+  .badge-carnivore {
+    background: #000;
+    color: #fff;
+  }
 
-.badge-period {
-  background: #fff;
-  color: #000;
-}
+  .badge-herbivore {
+    background: #fff;
+    color: #000;
+  }
+
+  .badge-period {
+    background: #fff;
+    color: #000;
+  }
 </style>
 
 <body>
@@ -167,16 +167,17 @@
 
   <main class="container-xl py-4 px-3 px-md-4" style="min-height:80vh;">
 
-    <div class="d-flex flex-column align-items-center justify-content-center py-5 text-center" style="min-height:50vh;">
+    <div id="state" class="d-flex flex-column align-items-center justify-content-center py-5 text-center"
+      style="min-height:50vh;">
       <h2 class="font-display fs-3 mb-2">Loading Dinocyclopedia...</h2>
       <p class="text-muted" style="max-width:26rem; font-size:.9rem;">
         Fetching specimens from the Mesozoic archives.
       </p>
     </div>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3" style="display:none;"></div>
+    <div id="grid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3" style="display:none;"></div>
 
-    <div class="text-center py-5" style="display:none;">
+    <div id="empty" class="text-center py-5" style="display:none;">
       <p class="font-display fs-2 text-secondary">No dinosaurs found.</p>
       <small class="text-muted">Try a different search term.</small>
     </div>
@@ -187,38 +188,38 @@
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
     crossorigin="anonymous"></script>
 
-<script>
-  const API = 'https://dinosaur-facts-api.shultzlab.com/dinosaurs';
-  let allDinos = [];
+  <script>
+    const API = 'https://dinosaur-facts-api.shultzlab.com/dinosaurs';
+    let allDinos = [];
 
-  const norm = (d) => ({
-    name:        d.name        || d.Name        || 'Unknown',
-    image:       d.image       || d.Image       || d.imageUrl || d.img || '',
-    description: d.description || d.Description || d.info     || '',
-    diet:        (d.diet       || d.Diet        || 'unknown').toLowerCase(),
-    period:      d.period      || d.Period      || d.era      || '',
-  });
+    const norm = (d) => ({
+      name: d.name || d.Name || 'Unknown',
+      image: d.image || d.Image || d.imageUrl || d.img || '',
+      description: d.description || d.Description || d.info || '',
+      diet: (d.diet || d.Diet || 'unknown').toLowerCase(),
+      period: d.period || d.Period || d.era || '',
+    });
 
-  const esc = (s) =>
-    String(s)
-      .replace(/&/g,  '&amp;')
-      .replace(/</g,  '&lt;')
-      .replace(/>/g,  '&gt;')
-      .replace(/"/g,  '&quot;');
+    const esc = (s) =>
+      String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
 
-  const fetchDinosaurs = async () => {
-    const res  = await fetch(API);
-    const data = await res.json();
-    const raw  = Array.isArray(data) ? data : (data.dinosaurs || Object.values(data));
+    const fetchDinosaurs = async () => {
+      const res = await fetch(API);
+      const data = await res.json();
+      const raw = Array.isArray(data) ? data : (data.dinosaurs || Object.values(data));
 
-    allDinos = raw.sort((a, b) => norm(a).name.localeCompare(norm(b).name));
+      allDinos = raw.sort((a, b) => norm(a).name.localeCompare(norm(b).name));
 
-    console.log('✅ Normalized sample:', norm(allDinos[0]));
-    console.log('📦 Total specimens:', allDinos.length);
-  }
+      console.log('✅ Normalized sample:', norm(allDinos[0]));
+      console.log('📦 Total specimens:', allDinos.length);
+    }
 
-  fetchDinosaurs();
-</script>
+    fetchDinosaurs();
+  </script>
 
 </body>
 
