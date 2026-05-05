@@ -116,15 +116,15 @@
   ></script>
 
 <script>
-  const API = 'https://dinosaur-facts-api.shorthillsai.com/dinosaurs';
+  const API = 'https://api.sampleapis.com/dinosaurs/dinosaurs';
   let allDinos = [];
 
   const norm = (d) => ({
     name:        d.name        || d.Name        || 'Unknown',
-    image:       d.image       || d.Image       || d.imageUrl || d.img || '',
-    description: d.description || d.Description || d.info     || '',
+    image:       d.wikimediaURL|| d.image       || d.Image || d.imageUrl || d.img || '',
+    description: d.description || d.Description || d.info  || '',
     diet:        (d.diet       || d.Diet        || 'unknown').toLowerCase(),
-    period:      d.period      || d.Period      || d.era      || '',
+    period:      d.period      || d.Period      || d.era   || '',
   });
 
   const esc = (s) =>
