@@ -30,7 +30,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    border-bottom: 1px solid var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border-primary);
     position: sticky;
     top: 0;
     background: var(--color-background-primary);
@@ -43,8 +43,7 @@
     font-family: 'DM Serif Display', serif;
     font-size: 1.5rem;
     letter-spacing: -.02em;
-    color: var(--color-text-primary);
-    text-decoration: none
+    color: var(--color-text-primary)
   }
 
   .wordmark em {
@@ -71,7 +70,7 @@
   }
 
   .search-wrap input {
-    border: 1px solid var(--color-text-primary);
+    border: 1px solid var(--color-border-primary);
     border-right: none;
     border-radius: 4px 0 0 4px;
     padding: 5px 10px;
@@ -84,7 +83,7 @@
   }
 
   .search-wrap button {
-    border: 1px solid var(--color-text-primary);
+    border: 1px solid var(--color-border-primary);
     border-radius: 0 4px 4px 0;
     padding: 5px 10px;
     background: var(--color-text-primary);
@@ -138,7 +137,7 @@
   }
 
   .card {
-    border: 1px solid var(--color-text-primary);
+    border: 1px solid var(--color-border-primary);
     border-radius: 6px;
     overflow: hidden;
     cursor: pointer;
@@ -163,7 +162,7 @@
   .card-img {
     height: 155px;
     background: var(--color-background-secondary);
-    border-bottom: 1px solid var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border-primary);
     overflow: hidden;
     position: relative;
     display: flex;
@@ -178,18 +177,9 @@
     display: block
   }
 
-  .fallback-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%
-  }
-
-  .fallback-wrap svg {
-    width: 65px;
-    height: 65px;
-    fill: #d0d0d0
+  .fallback-icon {
+    font-size: 52px;
+    color: var(--color-border-secondary)
   }
 
   .card-num {
@@ -253,7 +243,7 @@
     font-size: .7rem;
     color: var(--color-text-secondary);
     display: -webkit-box;
-   line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.5
@@ -301,7 +291,8 @@
 
   .pulse {
     animation: pulse 1.4s ease-in-out infinite;
-    color: var(--color-text-secondary)
+    color: var(--color-text-secondary);
+    font-size: 44px
   }
 
   @keyframes pulse {
@@ -351,34 +342,24 @@
   }
 
   .overlay {
-    position: fixed;
+    position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, .6);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, .55);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     z-index: 100;
-    padding: 16px
+    padding: 16px;
+    min-height: 100%
   }
 
   .modal {
-    background: rgba(255, 255, 255, .94);
-    border: 1px solid rgba(0, 0, 0, .8);
+    background: var(--color-background-primary);
+    border: 1px solid var(--color-border-primary);
     border-radius: 14px;
     width: min(560px, 100%);
-    max-height: 88vh;
-    overflow-y: auto;
     position: relative;
     animation: mIn .18s ease
-  }
-
-  @media(prefers-color-scheme:dark) {
-    .modal {
-      background: rgba(18, 18, 18, .94);
-      border-color: rgba(255, 255, 255, .25)
-    }
   }
 
   @keyframes mIn {
@@ -429,13 +410,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 1px solid var(--color-border-tertiary)
-  }
-
-  .modal-hero-fallback svg {
-    width: 100px;
-    height: 100px;
-    fill: #ccc
+    border-bottom: 1px solid var(--color-border-tertiary);
+    font-size: 90px;
+    color: var(--color-border-secondary)
   }
 
   .modal-body {
@@ -480,7 +457,7 @@
   .modal-pill {
     font-size: .63rem;
     letter-spacing: .04em;
-    border: 1px solid var(--color-text-primary);
+    border: 1px solid var(--color-border-primary);
     border-radius: 99px;
     padding: 3px 11px;
     background: transparent;
@@ -519,7 +496,7 @@
   }
 
   .nav-btn {
-    border: 1px solid var(--color-text-primary);
+    border: 1px solid var(--color-border-primary);
     background: transparent;
     color: var(--color-text-primary);
     padding: 6px 16px;
@@ -590,147 +567,258 @@
       <small class="text-muted">Try a different search term.</small>
     </div>
 
+    <div class="app" id="app">
+  <nav class="nav">
+    <span class="wordmark">Dino<em>cyclopedia</em></span>
+    <div class="nav-right">
+      <span class="count" id="count"></span>
+      <div class="search-wrap">
+        <input id="search" type="text" placeholder="Search dinosaurs..." autocomplete="off" />
+        <button onclick="doSearch()">SEARCH</button>
+      </div>
+    </div>
+  </nav>
+  <div class="filter-row" id="filter-row" style="display:none">
+    <span class="filter-label">DIET</span>
+    <button class="filter-btn active" onclick="setDiet(this,'')">All</button>
+    <button class="filter-btn" onclick="setDiet(this,'herbivore')">Herbivore</button>
+    <button class="filter-btn" onclick="setDiet(this,'carnivore')">Carnivore</button>
+    <button class="filter-btn" onclick="setDiet(this,'omnivore')">Omnivore</button>
+  </div>
+  <div id="state" class="state">
+    <div class="pulse"><i class="ti ti-mood-smile" aria-hidden="true"></i></div>
+    <p class="state-title">Loading Dinocyclopedia…</p>
+    <p class="state-sub" id="state-sub">Waking up the archive — this may take 15–30 s on first load.</p>
+  </div>
+  <div id="grid" class="grid" style="display:none"></div>
+  <div id="load-more-wrap" class="load-more-wrap" style="display:none">
+    <button class="load-more" onclick="showMore()">LOAD MORE</button>
+  </div>
+  <div id="empty" class="empty" style="display:none">No dinosaurs found.</div>
+</div>
+
+<div id="overlay" class="overlay" style="display:none" onclick="handleOverlay(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    <div id="modal-hero-wrap"></div>
+    <div class="modal-body">
+      <div class="modal-meta-row"><span class="modal-num" id="modal-num"></span></div>
+      <h2 class="modal-name" id="modal-name"></h2>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-pills" id="modal-pills"></div>
+      <div class="modal-attrib" id="modal-attrib"></div>
+      <div class="modal-nav">
+        <span class="modal-pos" id="modal-pos"></span>
+        <div class="nav-btns">
+          <button class="nav-btn" id="btn-prev" onclick="navigate(-1)">← PREV</button>
+          <button class="nav-btn" id="btn-next" onclick="navigate(1)">NEXT →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-    crossorigin="anonymous"></script>
-
   <script>
-    let allDinos = [];
+  const BASE = 'https://restasaurus.onrender.com/api/v1';
+  const PAGE_SIZE = 40;
+  let allDinos = [], filtered = [], displayed = 0, currentIdx = 0, dietFilter = '';
 
-    const DINO_SVG = `<svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
-      <path d="M70,55 C68,50 65,46 60,44 L58,30 C57,24 52,20 47,22 L40,24 C36,25 32,28 30,32 L25,40 C20,42 16,46 15,52 L14,58 C14,60 15,62 17,62 L22,62 L22,68 C22,70 24,72 26,72 L30,72 C32,72 34,70 34,68 L34,62 L55,62 L55,68 C55,70 57,72 59,72 L63,72 C65,72 67,70 67,68 L67,62 L72,62 C75,62 77,59 76,56 Z M50,28 C52,26 55,27 56,30 L57,38 L45,37 L46,30 C47,28 48,27 50,28 Z M80,38 C82,36 86,36 88,40 L90,48 C90,50 88,52 86,52 L76,50 L74,42 Z"/>
-    </svg>`;
+  function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
-    const norm = (d) => ({
-      name: d.name || 'Unknown',
-      description: d.description || '',
-      period: d.period || '',
-      diet: d.diet || '',
-      length: d.length || '',
+  function getField(d, ...keys) { for (const k of keys) { if (d[k] != null && d[k] !== '') return d[k]; } return ''; }
+
+  function getImageUrl(d) {
+    if (d.image && typeof d.image === 'object' && d.image.imageURL) return d.image.imageURL;
+    if (d.imageURL) return d.imageURL;
+    if (typeof d.image === 'string' && d.image.startsWith('http')) return d.image;
+    return '';
+  }
+
+  function dietCode(d) {
+    const l = (d || '').toLowerCase();
+    if (l.includes('carnivore')) return 'C';
+    if (l.includes('herbivore')) return 'H';
+    if (l.includes('omnivore')) return 'O';
+    return '';
+  }
+
+  function getClades(d) {
+    const clades = [];
+    for (let i = 1; i <= 5; i++) { const v = d['clade' + i] || d['clade_' + i]; if (v) clades.push(v); }
+    if (d.clade && !clades.length) clades.push(d.clade);
+    return clades;
+  }
+
+  async function fetchAllPages() {
+    let page = 1, all = [], total = null;
+    while (true) {
+      const r = await fetch(`${BASE}/dinosaurs?page=${page}`);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const data = await r.json();
+      if (total === null) total = data.totalDinosaurs || data.total || data.count || null;
+      const items = data.dinosaurs || data.data || data.results || [];
+      if (!items.length) break;
+      all = all.concat(items);
+      document.getElementById('state-sub').textContent = `Loaded ${all.length}${total ? ' of ' + total : ''} specimens…`;
+      const pageSize = items.length;
+      if (pageSize < 10) break;
+      page++;
+    }
+    return all;
+  }
+
+  async function init() {
+    try {
+      const dinos = await fetchAllPages();
+      allDinos = dinos.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      document.getElementById('state').style.display = 'none';
+      document.getElementById('filter-row').style.display = 'flex';
+      filtered = allDinos;
+      displayed = 0;
+      renderGrid(true);
+    } catch (err) {
+      document.getElementById('state').innerHTML = `<p class="state-title">Failed to load</p><p class="state-sub">${esc(err.message)}</p><button class="retry" onclick="location.reload()">Try again</button>`;
+    }
+  }
+
+  function renderGrid(reset) {
+    const grid = document.getElementById('grid');
+    const empty = document.getElementById('empty');
+    const lmw = document.getElementById('load-more-wrap');
+    const count = document.getElementById('count');
+    if (!filtered.length) {
+      grid.style.display = 'none'; empty.style.display = ''; lmw.style.display = 'none';
+      count.textContent = '0 results'; return;
+    }
+    empty.style.display = 'none'; grid.style.display = '';
+    if (reset) { grid.innerHTML = ''; displayed = 0; }
+    const slice = filtered.slice(displayed, displayed + PAGE_SIZE);
+    const frag = document.createDocumentFragment();
+    slice.forEach((d, i) => {
+      const gi = allDinos.indexOf(d);
+      const absI = filtered.indexOf(d);
+      const dc = dietCode(getField(d, 'diet'));
+      const temporal = getField(d, 'temporalrange', 'temporal_range', 'temporalRange');
+      const loco = getField(d, 'locomotiontype', 'locomotion_type', 'locomotion');
+      const imgUrl = getImageUrl(d);
+      const col = document.createElement('div');
+      col.innerHTML = `<div class="card" style="animation-delay:${Math.min(i * 20, 400)}ms" onclick="openModal(${gi})">
+      <div class="card-img" id="cimg-${gi}">
+        ${imgUrl ? `<img src="${esc(imgUrl)}" alt="${esc(d.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=fallback-icon><i class=\\'ti ti-dinosaur\\'></i></div>'">` : `<div class="fallback-icon"><i class="ti ti-dinosaur" aria-hidden="true"></i></div>`}
+        <span class="card-num">${String(absI + 1).padStart(3, '0')}</span>
+        ${dc ? `<span class="diet-badge diet-${dc}">${dc === 'C' ? 'Carn' : dc === 'H' ? 'Herb' : 'Omni'}</span>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-name">${esc(d.name || 'Unknown')}</div>
+        ${d.description ? `<div class="card-desc">${esc(d.description)}</div>` : ''}
+        <div class="card-pills">
+          ${temporal ? `<span class="pill">${esc(temporal)}</span>` : ''}
+          ${loco ? `<span class="pill">${esc(loco)}</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+      frag.appendChild(col);
     });
+    grid.appendChild(frag);
+    displayed += slice.length;
+    count.textContent = filtered.length + ' specimen' + (filtered.length !== 1 ? 's' : '');
+    lmw.style.display = displayed < filtered.length ? '' : 'none';
+  }
 
-    const esc = (s) =>
-      String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+  function showMore() { renderGrid(false); }
 
-    const renderCards = (dinos) => {
-      const grid = document.getElementById('grid');
-      const empty = document.getElementById('empty');
-      const count = document.getElementById('count');
+  function openModal(gi) {
+    currentIdx = gi;
+    showModal(gi);
+    document.getElementById('overlay').style.display = 'flex';
+  }
 
-      if (!dinos.length) {
-        grid.style.display = 'none';
-        empty.style.display = '';
-        count.textContent = '0 results';
-        return;
-      }
+  function showModal(gi) {
+    const d = allDinos[gi]; if (!d) return;
+    currentIdx = gi;
+    const pos = filtered.indexOf(d);
+    document.getElementById('modal-num').textContent = String(pos + 1).padStart(3, '0') + ' / ' + String(filtered.length).padStart(3, '0');
+    document.getElementById('modal-pos').textContent = String(gi + 1).padStart(3, '0') + ' of ' + String(allDinos.length).padStart(3, '0') + ' total';
+    document.getElementById('modal-name').textContent = d.name || 'Unknown';
+    document.getElementById('modal-desc').textContent = d.description || '';
+    const imgUrl = getImageUrl(d);
+    const heroWrap = document.getElementById('modal-hero-wrap');
+    if (imgUrl) {
+      heroWrap.innerHTML = `<img class="modal-hero" src="${esc(imgUrl)}" alt="${esc(d.name)}" onerror="this.outerHTML='<div class=modal-hero-fallback><i class=ti-dinosaur style=font-size:90px></i></div>'">`;
+    } else {
+      heroWrap.innerHTML = `<div class="modal-hero-fallback"><i class="ti ti-dinosaur" aria-hidden="true"></i></div>`;
+    }
+    const diet = getField(d, 'diet');
+    const temporal = getField(d, 'temporalrange', 'temporal_range', 'temporalRange');
+    const loco = getField(d, 'locomotiontype', 'locomotion_type', 'locomotion');
+    const clades = getClades(d);
+    const pills = [temporal, diet, loco, ...clades].filter(Boolean);
+    document.getElementById('modal-pills').innerHTML = pills.map(p => `<span class="modal-pill">${esc(p)}</span>`).join('');
+    let attrib = '';
+    if (d.image && typeof d.image === 'object') {
+      if (d.image.author) attrib += `Image: ${esc(d.image.author)}${d.image.license ? ' · ' + esc(d.image.license) : ''}. `;
+    }
+    const wikiUrl = d.source?.wikipediaURL || d.wikipediaURL;
+    if (wikiUrl) attrib += `<a href="${esc(wikiUrl)}" target="_blank">Wikipedia source</a>`;
+    document.getElementById('modal-attrib').innerHTML = attrib;
+    const prevGi = findAdjacentInFiltered(gi, -1);
+    const nextGi = findAdjacentInFiltered(gi, 1);
+    document.getElementById('btn-prev').disabled = prevGi === -1;
+    document.getElementById('btn-next').disabled = nextGi === -1;
+    document.getElementById('modal').scrollTop = 0;
+  }
 
-      empty.style.display = 'none';
-      grid.style.display = '';
-      count.textContent = dinos.length + ' specimen' + (dinos.length !== 1 ? 's' : '');
+  function findAdjacentInFiltered(gi, dir) {
+    const pos = filtered.indexOf(allDinos[gi]);
+    const nextPos = pos + dir;
+    if (nextPos < 0 || nextPos >= filtered.length) return -1;
+    return allDinos.indexOf(filtered[nextPos]);
+  }
 
-      grid.innerHTML = dinos.map((raw, i) => {
-        const d = norm(raw);
-        const idx = String(i + 1).padStart(3, '0');
+  function navigate(dir) { const nextGi = findAdjacentInFiltered(currentIdx, dir); if (nextGi !== -1) showModal(nextGi); }
+  function closeModal() { document.getElementById('overlay').style.display = 'none'; }
+  function handleOverlay(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
 
-        return `
-        <div class="col">
-          <div class="card h-100 dino-card" style="animation-delay:${Math.min(i * 28, 600)}ms">
-            <div class="overflow-hidden position-relative">
-              <div class="img-placeholder">
-                <div class="dino-silhouette">${DINO_SVG}</div>
-              </div>
-              <span class="badge bg-dark position-absolute top-0 start-0 m-2 rounded-1"
-                style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.05em;font-weight:400">
-                ${esc(idx)}
-              </span>
-            </div>
-            <div class="card-body d-flex flex-column gap-2 p-3">
-              <h5 class="card-title mb-0">${esc(d.name)}</h5>
-              ${d.description ? `<p class="card-text mb-0">${esc(d.description)}</p>` : ''}
-              <div class="d-flex flex-wrap gap-1 mt-auto pt-1">
-                ${d.period ? `<span class="meta-pill">${esc(d.period)}</span>` : ''}
-                ${d.diet ? `<span class="meta-pill">${esc(d.diet)}</span>` : ''}
-                ${d.length ? `<span class="meta-pill">${esc(d.length)}</span>` : ''}
-              </div>
-            </div>
-          </div>
-        </div>`;
-      }).join('');
-    };
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('overlay').style.display !== 'none') {
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowLeft') navigate(-1);
+      if (e.key === 'ArrowRight') navigate(1);
+    }
+  });
 
-    const fetchDinosaurs = async () => {
-      try {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 4000,
-            messages: [{
-              role: 'user',
-              content: `Generate a JSON array of 40 well-known dinosaurs. Return ONLY valid JSON, no markdown, no preamble.
-              Each object must have these fields:
-              - name (string): scientific name
-              - description (string): 1-2 sentence factual description, 30-60 words
-              - period (string): e.g. "Late Cretaceous" or "Early Jurassic"
-              - diet (string): "Carnivore", "Herbivore", or "Omnivore"
-              - length (string): approximate length, e.g. "12m" or "0.5m"
+  let searchTimer;
+  document.getElementById('search').addEventListener('input', function () {
+    clearTimeout(searchTimer); searchTimer = setTimeout(doSearch, 200);
+  });
+  document.getElementById('search').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
 
-              Include a wide variety: large and small, predators and herbivores, from different periods.
-              Return ONLY the JSON array, nothing else.`
-            }]
-          })
-        });
+  function doSearch() {
+    const q = document.getElementById('search').value.trim().toLowerCase();
+    applyFilters(q, dietFilter);
+  }
 
-        if (!res.ok) throw new Error(`API error: HTTP ${res.status}`);
-        const data = await res.json();
+  function setDiet(btn, diet) {
+    dietFilter = diet;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+    applyFilters(document.getElementById('search').value.trim().toLowerCase(), diet);
+  }
 
-        const text = data.content
-          .filter(b => b.type === 'text')
-          .map(b => b.text)
-          .join('');
-
-        const cleaned = text.replace(/```json|```/g, '').trim();
-        const dinos = JSON.parse(cleaned);
-
-        if (!Array.isArray(dinos)) throw new Error('Unexpected response format');
-
-        allDinos = dinos.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-
-        document.getElementById('state').style.display = 'none';
-        renderCards(allDinos);
-      } catch (err) {
-        const state = document.getElementById('state');
-        state.classList.add('error');
-        state.innerHTML = `
-          <h2 class="font-display fs-3 mb-2">Failed to load</h2>
-          <p class="text-muted" style="max-width:26rem; font-size:.9rem;">${esc(err.message)}</p>
-          <button class="btn btn-dark btn-sm mt-2" onclick="location.reload()">Try again</button>
-        `;
-      }
-    };
-
-    fetchDinosaurs();
-
-    document.getElementById('search').addEventListener('input', function () {
-      const q = this.value.trim().toLowerCase();
-      renderCards(
-        q
-          ? allDinos.filter((raw) => {
-              const d = norm(raw);
-              return [d.name, d.description, d.period, d.diet]
-                .some((v) => v.toLowerCase().includes(q));
-            })
-          : allDinos
-      );
+  function applyFilters(q, diet) {
+    filtered = allDinos.filter(d => {
+      const temporal = getField(d, 'temporalrange', 'temporal_range', 'temporalRange');
+      const loco = getField(d, 'locomotiontype', 'locomotion_type', 'locomotion');
+      const clades = getClades(d).join(' ');
+      const matchQ = !q || [d.name, d.description, d.diet, temporal, loco, clades].some(v => v && v.toLowerCase().includes(q));
+      const matchD = !diet || (d.diet || '').toLowerCase().includes(diet);
+      return matchQ && matchD;
     });
-  </script>
+    renderGrid(true);
+  }
+
+  init();
+</script>
 
 </body>
 
