@@ -1,13 +1,20 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dinocyclopedia</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0 }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
     body {
       font-family: 'DM Mono', monospace;
@@ -33,13 +40,18 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+
     .wordmark {
       font-family: 'DM Serif Display', serif;
       font-size: 1.5rem;
       letter-spacing: -.02em;
       color: #111;
     }
-    .wordmark em { font-style: italic }
+
+    .wordmark em {
+      font-style: italic
+    }
+
     .nav-right {
       display: flex;
       align-items: center;
@@ -48,8 +60,17 @@
       justify-content: flex-end;
       flex-wrap: wrap;
     }
-    .count { font-size: .68rem; color: #777; white-space: nowrap }
-    .search-wrap { display: flex }
+
+    .count {
+      font-size: .68rem;
+      color: #777;
+      white-space: nowrap
+    }
+
+    .search-wrap {
+      display: flex
+    }
+
     .search-wrap input {
       border: 1px solid #ccc;
       border-right: none;
@@ -62,6 +83,7 @@
       outline: none;
       width: 170px;
     }
+
     .search-wrap button {
       border: 1px solid #111;
       border-radius: 0 4px 4px 0;
@@ -82,7 +104,14 @@
       flex-wrap: wrap;
       align-items: center;
     }
-    .filter-label { font-size: .65rem; color: #777; letter-spacing: .04em; margin-right: 2px }
+
+    .filter-label {
+      font-size: .65rem;
+      color: #777;
+      letter-spacing: .04em;
+      margin-right: 2px
+    }
+
     .filter-btn {
       font-family: 'DM Mono', monospace;
       font-size: .62rem;
@@ -95,6 +124,7 @@
       color: #777;
       transition: all .15s;
     }
+
     .filter-btn.active {
       background: #111;
       color: #fff;
@@ -108,7 +138,11 @@
       padding: 16px;
       align-items: stretch;
     }
-    .grid > div { display: flex; }
+
+    .grid>div {
+      display: flex;
+    }
+
     .card {
       border: 1px solid #ddd;
       border-radius: 6px;
@@ -123,8 +157,17 @@
       flex-direction: column;
       height: 100%;
     }
-    .card:hover { transform: translateY(-2px) }
-    @keyframes rise { to { opacity: 1; transform: translateY(0) } }
+
+    .card:hover {
+      transform: translateY(-2px)
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
 
     .card-img {
       height: 155px;
@@ -136,11 +179,23 @@
       align-items: center;
       justify-content: center;
     }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; display: block }
-    .fallback-icon { font-size: 52px; color: #ccc }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    .fallback-icon {
+      font-size: 52px;
+      color: #ccc
+    }
+
     .card-num {
       position: absolute;
-      top: 6px; left: 6px;
+      top: 6px;
+      left: 6px;
       background: #111;
       color: #fff;
       font-family: 'DM Mono', monospace;
@@ -149,9 +204,11 @@
       border-radius: 2px;
       z-index: 1;
     }
+
     .diet-badge {
       position: absolute;
-      top: 6px; right: 6px;
+      top: 6px;
+      right: 6px;
       font-family: 'DM Mono', monospace;
       font-size: .55rem;
       padding: 2px 6px;
@@ -159,13 +216,49 @@
       z-index: 1;
       border: 1px solid;
     }
-    .diet-C { background: #fff; border-color: #000; color: #000 }
-    .diet-H { background: #000; border-color: #000; color: #fff }
-    .diet-O { background: #888; border-color: #888; color: #fff }
 
-    .card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 5px; flex: 1 }
-    .card-name { font-family: 'DM Serif Display', serif; font-size: .95rem; letter-spacing: -.02em; line-height: 1.2; flex: 1 }
-    .card-pills { display: flex; flex-wrap: wrap; gap: 3px; margin-top: auto; padding-top: 6px }
+    .diet-C {
+      background: #fff;
+      border-color: #000;
+      color: #000
+    }
+
+    .diet-H {
+      background: #000;
+      border-color: #000;
+      color: #fff
+    }
+
+    .diet-O {
+      background: #888;
+      border-color: #888;
+      color: #fff
+    }
+
+    .card-body {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1
+    }
+
+    .card-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: .95rem;
+      letter-spacing: -.02em;
+      line-height: 1.2;
+      flex: 1
+    }
+
+    .card-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-top: auto;
+      padding-top: 6px
+    }
+
     .pill {
       font-size: .58rem;
       letter-spacing: .03em;
@@ -191,10 +284,37 @@
       gap: 12px;
       min-height: 300px;
     }
-    .state-title { font-family: 'DM Serif Display', serif; font-size: 1.6rem }
-    .state-sub { font-size: .8rem; color: #777; max-width: 24rem; line-height: 1.6 }
-    .pulse { animation: pulse 1.4s ease-in-out infinite; color: #ccc; font-size: 44px }
-    @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .2 } }
+
+    .state-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem
+    }
+
+    .state-sub {
+      font-size: .8rem;
+      color: #777;
+      max-width: 24rem;
+      line-height: 1.6
+    }
+
+    .pulse {
+      animation: pulse 1.4s ease-in-out infinite;
+      color: #ccc;
+      font-size: 44px
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .2
+      }
+    }
+
     .retry {
       border: 1px solid #111;
       background: #111;
@@ -207,7 +327,11 @@
       margin-top: 6px;
     }
 
-    .load-more-wrap { text-align: center; padding: 20px }
+    .load-more-wrap {
+      text-align: center;
+      padding: 20px
+    }
+
     .load-more {
       border: 1px solid #111;
       background: transparent;
@@ -219,12 +343,16 @@
       border-radius: 4px;
       letter-spacing: .05em;
     }
-    .load-more:hover { background: #111; color: #fff }
+
+    .load-more:hover {
+      background: #111;
+      color: #fff
+    }
 
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.55);
+      background: rgba(0, 0, 0, .55);
       display: flex;
       align-items: flex-start;
       justify-content: center;
@@ -232,6 +360,7 @@
       padding: 24px 16px;
       overflow-y: auto;
     }
+
     .modal {
       background: #fff;
       border: 1px solid #ddd;
@@ -244,17 +373,28 @@
       margin: auto;
       flex-shrink: 0;
     }
+
     @keyframes mIn {
-      from { opacity: 0; transform: scale(.95) translateY(10px) }
-      to   { opacity: 1; transform: scale(1)  translateY(0) }
+      from {
+        opacity: 0;
+        transform: scale(.95) translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0)
+      }
     }
+
     .modal-close {
       position: absolute;
-      top: 12px; right: 12px;
+      top: 12px;
+      right: 12px;
       background: transparent;
       border: 1px solid #ccc;
       border-radius: 50%;
-      width: 28px; height: 28px;
+      width: 28px;
+      height: 28px;
       font-size: .85rem;
       cursor: pointer;
       display: flex;
@@ -264,6 +404,7 @@
       z-index: 2;
       line-height: 1;
     }
+
     .modal-hero {
       width: 100%;
       height: 230px;
@@ -272,6 +413,7 @@
       background: #f5f5f5;
       display: block;
     }
+
     .modal-hero-fallback {
       width: 100%;
       height: 230px;
@@ -284,9 +426,24 @@
       font-size: 90px;
       color: #ccc;
     }
-    .modal-body { padding: 18px 22px 22px }
-    .modal-meta-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px }
-    .modal-num { font-size: .65rem; letter-spacing: .06em; color: #777 }
+
+    .modal-body {
+      padding: 18px 22px 22px
+    }
+
+    .modal-meta-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 6px
+    }
+
+    .modal-num {
+      font-size: .65rem;
+      letter-spacing: .06em;
+      color: #777
+    }
+
     .modal-name {
       font-family: 'DM Serif Display', serif;
       font-size: 1.75rem;
@@ -294,8 +451,21 @@
       line-height: 1.15;
       margin-bottom: 10px;
     }
-    .modal-desc { font-size: .8rem; line-height: 1.75; color: #555; margin-bottom: 14px }
-    .modal-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px }
+
+    .modal-desc {
+      font-size: .8rem;
+      line-height: 1.75;
+      color: #555;
+      margin-bottom: 14px
+    }
+
+    .modal-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px
+    }
+
     .modal-pill {
       font-size: .63rem;
       letter-spacing: .04em;
@@ -305,6 +475,7 @@
       background: transparent;
       color: #111;
     }
+
     .modal-attrib {
       font-size: .6rem;
       color: #999;
@@ -313,10 +484,29 @@
       border-top: 1px solid #eee;
       margin-bottom: 16px;
     }
-    .modal-attrib a { color: #999 }
-    .modal-nav { display: flex; gap: 8px; justify-content: space-between; align-items: center }
-    .modal-pos { font-size: .65rem; color: #777; letter-spacing: .04em }
-    .nav-btns { display: flex; gap: 8px }
+
+    .modal-attrib a {
+      color: #999
+    }
+
+    .modal-nav {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .modal-pos {
+      font-size: .65rem;
+      color: #777;
+      letter-spacing: .04em
+    }
+
+    .nav-btns {
+      display: flex;
+      gap: 8px
+    }
+
     .nav-btn {
       border: 1px solid #ccc;
       background: transparent;
@@ -329,8 +519,16 @@
       border-radius: 4px;
       transition: background .12s, color .12s;
     }
-    .nav-btn:hover { background: #111; color: #fff }
-    .nav-btn:disabled { opacity: .25; cursor: default }
+
+    .nav-btn:hover {
+      background: #111;
+      color: #fff
+    }
+
+    .nav-btn:disabled {
+      opacity: .25;
+      cursor: default
+    }
 
     .empty {
       text-align: center;
@@ -341,177 +539,182 @@
     }
   </style>
 </head>
+
 <body>
 
-<div class="app" id="app">
-  <nav class="nav">
-    <span class="wordmark">Dino<em>cyclopedia</em></span>
-    <div class="nav-right">
-      <span class="count" id="count"></span>
-      <div class="search-wrap">
-        <input id="search" type="text" placeholder="Search dinosaurs..." autocomplete="off"/>
-        <button onclick="doSearch()">SEARCH</button>
+  <div class="app" id="app">
+    <nav class="nav">
+      <span class="wordmark">Dino<em>cyclopedia</em></span>
+      <div class="nav-right">
+        <span class="count" id="count"></span>
+        <div class="search-wrap">
+          <input id="search" type="text" placeholder="Search dinosaurs..." autocomplete="off" />
+          <button onclick="doSearch()">SEARCH</button>
+        </div>
       </div>
+    </nav>
+
+    <div class="filter-row" id="filter-row" style="display:none">
+      <span class="filter-label">DIET</span>
+      <button class="filter-btn active" onclick="setDiet(this,'')">All</button>
+      <button class="filter-btn" onclick="setDiet(this,'herbivorous')">Herbivore</button>
+      <button class="filter-btn" onclick="setDiet(this,'carnivorous')">Carnivore</button>
+      <button class="filter-btn" onclick="setDiet(this,'omnivorous')">Omnivore</button>
     </div>
-  </nav>
 
-  <div class="filter-row" id="filter-row" style="display:none">
-    <span class="filter-label">DIET</span>
-    <button class="filter-btn active" onclick="setDiet(this,'')">All</button>
-    <button class="filter-btn" onclick="setDiet(this,'herbivorous')">Herbivore</button>
-    <button class="filter-btn" onclick="setDiet(this,'carnivorous')">Carnivore</button>
-    <button class="filter-btn" onclick="setDiet(this,'omnivorous')">Omnivore</button>
+    <div id="state" class="state">
+      <div class="pulse"><i class="ti ti-mood-smile" aria-hidden="true"></i></div>
+      <p class="state-title">Loading Dinocyclopedia…</p>
+      <p class="state-sub" id="state-sub">Waking up the server — this may take 15–60 s on first load.</p>
+    </div>
+
+    <div id="grid" class="grid" style="display:none"></div>
+
+    <div id="load-more-wrap" class="load-more-wrap" style="display:none">
+      <button class="load-more" onclick="showMore()">LOAD MORE</button>
+    </div>
+
+    <div id="empty" class="empty" style="display:none">No dinosaurs found.</div>
   </div>
 
-  <div id="state" class="state">
-    <div class="pulse"><i class="ti ti-mood-smile" aria-hidden="true"></i></div>
-    <p class="state-title">Loading Dinocyclopedia…</p>
-    <p class="state-sub" id="state-sub">Waking up the server — this may take 15–60 s on first load.</p>
-  </div>
-
-  <div id="grid" class="grid" style="display:none"></div>
-
-  <div id="load-more-wrap" class="load-more-wrap" style="display:none">
-    <button class="load-more" onclick="showMore()">LOAD MORE</button>
-  </div>
-
-  <div id="empty" class="empty" style="display:none">No dinosaurs found.</div>
-</div>
-
-<div id="overlay" class="overlay" style="display:none" onclick="handleOverlay(event)">
-  <div class="modal" id="modal">
-    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
-    <div id="modal-hero-wrap"></div>
-    <div class="modal-body">
-      <div class="modal-meta-row"><span class="modal-num" id="modal-num"></span></div>
-      <h2 class="modal-name" id="modal-name"></h2>
-      <p class="modal-desc" id="modal-desc"></p>
-      <div class="modal-pills" id="modal-pills"></div>
-      <div class="modal-attrib" id="modal-attrib"></div>
-      <div class="modal-nav">
-        <span class="modal-pos" id="modal-pos"></span>
-        <div class="nav-btns">
-          <button class="nav-btn" id="btn-prev" onclick="navigate(-1)">← PREV</button>
-          <button class="nav-btn" id="btn-next" onclick="navigate(1)">NEXT →</button>
+  <div id="overlay" class="overlay" style="display:none" onclick="handleOverlay(event)">
+    <div class="modal" id="modal">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      <div id="modal-hero-wrap"></div>
+      <div class="modal-body">
+        <div class="modal-meta-row"><span class="modal-num" id="modal-num"></span></div>
+        <h2 class="modal-name" id="modal-name"></h2>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="modal-pills" id="modal-pills"></div>
+        <div class="modal-attrib" id="modal-attrib"></div>
+        <div class="modal-nav">
+          <span class="modal-pos" id="modal-pos"></span>
+          <div class="nav-btns">
+            <button class="nav-btn" id="btn-prev" onclick="navigate(-1)">← PREV</button>
+            <button class="nav-btn" id="btn-next" onclick="navigate(1)">NEXT →</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-  const API_URL = 'https://vikiru.github.io/restasaurus/api/v1/dinosaurs';
-  const PAGE_SIZE = 40;
+  <script>
+    const API_URL = 'https://vikiru.github.io/restasaurus/api/dinosaurs.json';
+    const PAGE_SIZE = 40;
 
-  let allDinos = [], filtered = [], displayed = 0, currentIdx = 0, dietFilter = '';
+    let allDinos = [], filtered = [], displayed = 0, currentIdx = 0, dietFilter = '';
 
-  function esc(s) {
-    return String(s || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+    function esc(s) {
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
 
-  function getImageUrl(d) {
-    return d.image || d.image_url || d.img || '';
-  }
+    function getImageUrl(d) {
+      return d.image || d.image_url || d.img || '';
+    }
 
-  function dietCode(diet) {
-    const l = (diet || '').toLowerCase();
-    if (l.includes('carn')) return 'C';
-    if (l.includes('herb')) return 'H';
-    if (l.includes('omniv')) return 'O';
-    return '';
-  }
+    function dietCode(diet) {
+      const l = (diet || '').toLowerCase();
+      if (l.includes('carn')) return 'C';
+      if (l.includes('herb')) return 'H';
+      if (l.includes('omniv')) return 'O';
+      return '';
+    }
 
-  function truncatePeriod(period, maxLen = 28) {
-    if (!period) return '';
-    return period.length > maxLen ? period.slice(0, maxLen - 1) + '…' : period;
-  }
+    function truncatePeriod(period, maxLen = 28) {
+      if (!period) return '';
+      return period.length > maxLen ? period.slice(0, maxLen - 1) + '…' : period;
+    }
 
-  async function init() {
-    try {
-      document.getElementById('state-sub').textContent = 'Fetching dinosaurs…';
+    async function init() {
+      try {
+        document.getElementById('state-sub').textContent = 'Fetching dinosaurs…';
 
-      const res = await fetch(API_URL);
-      const data = await res.json();
+        const res = await fetch(API_URL);
 
-      console.log("RAW API:", data);
+        if (!res.ok) {
+          throw new Error(`API not found: ${res.status} ${res.statusText}`);
+        }
+        const data = await res.json();
 
-      const raw = Array.isArray(data)
-        ? data
-        : (data.dinos || data.data || data.results || []);
+        console.log("RAW API:", data);
 
-      // 🔥 normalize API fields so your UI never breaks
-      allDinos = raw.map(d => ({
-        name: d.name || 'Unknown',
-        image: getImageUrl(d),
-        diet: d.diet || '',
-        historical_period: d.historical_period || d.period || '',
-        description: d.description || ''
-      }));
+        const raw = Array.isArray(data)
+          ? data
+          : (data.dinos || data.data || data.results || []);
 
-      allDinos.sort((a, b) => a.name.localeCompare(b.name));
+        // 🔥 normalize API fields so your UI never breaks
+        allDinos = raw.map(d => ({
+          name: d.name || 'Unknown',
+          image: getImageUrl(d),
+          diet: d.diet || '',
+          historical_period: d.historical_period || d.period || '',
+          description: d.description || ''
+        }));
 
-      document.getElementById('state').style.display = 'none';
-      document.getElementById('filter-row').style.display = 'flex';
+        allDinos.sort((a, b) => a.name.localeCompare(b.name));
 
-      filtered = allDinos;
-      displayed = 0;
-      renderGrid(true);
+        document.getElementById('state').style.display = 'none';
+        document.getElementById('filter-row').style.display = 'flex';
 
-    } catch (err) {
-      document.getElementById('state').innerHTML = `
+        filtered = allDinos;
+        displayed = 0;
+        renderGrid(true);
+
+      } catch (err) {
+        document.getElementById('state').innerHTML = `
         <p class="state-title">Failed to load</p>
         <p class="state-sub">${esc(err.message)}</p>
         <button class="retry" onclick="location.reload()">Retry</button>
       `;
-    }
-  }
-
-  function renderGrid(reset) {
-    const grid = document.getElementById('grid');
-    const empty = document.getElementById('empty');
-    const lmw = document.getElementById('load-more-wrap');
-    const count = document.getElementById('count');
-
-    if (!filtered.length) {
-      grid.style.display = 'none';
-      empty.style.display = '';
-      lmw.style.display = 'none';
-      count.textContent = '0 results';
-      return;
+      }
     }
 
-    empty.style.display = 'none';
-    grid.style.display = '';
+    function renderGrid(reset) {
+      const grid = document.getElementById('grid');
+      const empty = document.getElementById('empty');
+      const lmw = document.getElementById('load-more-wrap');
+      const count = document.getElementById('count');
 
-    if (reset) {
-      grid.innerHTML = '';
-      displayed = 0;
-    }
+      if (!filtered.length) {
+        grid.style.display = 'none';
+        empty.style.display = '';
+        lmw.style.display = 'none';
+        count.textContent = '0 results';
+        return;
+      }
 
-    const slice = filtered.slice(displayed, displayed + PAGE_SIZE);
-    const frag = document.createDocumentFragment();
+      empty.style.display = 'none';
+      grid.style.display = '';
 
-    slice.forEach((d, i) => {
-      const gi = allDinos.indexOf(d);
-      const absI = filtered.indexOf(d);
-      const dc = dietCode(d.diet);
-      const period = d.historical_period;
+      if (reset) {
+        grid.innerHTML = '';
+        displayed = 0;
+      }
 
-      const imgUrl = d.image;
+      const slice = filtered.slice(displayed, displayed + PAGE_SIZE);
+      const frag = document.createDocumentFragment();
 
-      const col = document.createElement('div');
+      slice.forEach((d, i) => {
+        const gi = allDinos.indexOf(d);
+        const absI = filtered.indexOf(d);
+        const dc = dietCode(d.diet);
+        const period = d.historical_period;
 
-      col.innerHTML = `
+        const imgUrl = d.image;
+
+        const col = document.createElement('div');
+
+        col.innerHTML = `
         <div class="card" onclick="openModal(${gi})">
           <div class="card-img">
             ${imgUrl
-              ? `<img src="${esc(imgUrl)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-              : ''
-            }
+            ? `<img src="${esc(imgUrl)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+            : ''
+          }
             <div class="fallback-icon" ${imgUrl ? 'style="display:none"' : ''}>
               🦕
             </div>
@@ -532,84 +735,85 @@
         </div>
       `;
 
-      frag.appendChild(col);
-    });
+        frag.appendChild(col);
+      });
 
-    grid.appendChild(frag);
-    displayed += slice.length;
+      grid.appendChild(frag);
+      displayed += slice.length;
 
-    count.textContent = `${filtered.length} specimen${filtered.length !== 1 ? 's' : ''}`;
-    lmw.style.display = displayed < filtered.length ? '' : 'none';
-  }
+      count.textContent = `${filtered.length} specimen${filtered.length !== 1 ? 's' : ''}`;
+      lmw.style.display = displayed < filtered.length ? '' : 'none';
+    }
 
-  function showMore() {
-    renderGrid(false);
-  }
+    function showMore() {
+      renderGrid(false);
+    }
 
-  function openModal(gi) {
-    currentIdx = gi;
-    const d = allDinos[gi];
+    function openModal(gi) {
+      currentIdx = gi;
+      const d = allDinos[gi];
 
-    document.getElementById('overlay').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+      document.getElementById('overlay').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
 
-    document.getElementById('modal-name').textContent = d.name;
-    document.getElementById('modal-desc').textContent = d.description;
+      document.getElementById('modal-name').textContent = d.name;
+      document.getElementById('modal-desc').textContent = d.description;
 
-    const img = d.image;
-    document.getElementById('modal-hero-wrap').innerHTML = img
-      ? `<img class="modal-hero" src="${esc(img)}">`
-      : `<div class="modal-hero-fallback">🦕</div>`;
+      const img = d.image;
+      document.getElementById('modal-hero-wrap').innerHTML = img
+        ? `<img class="modal-hero" src="${esc(img)}">`
+        : `<div class="modal-hero-fallback">🦕</div>`;
 
-    document.getElementById('modal-pills').innerHTML = `
+      document.getElementById('modal-pills').innerHTML = `
       ${d.historical_period ? `<span class="modal-pill">${esc(d.historical_period)}</span>` : ''}
       ${d.diet ? `<span class="modal-pill">${esc(d.diet)}</span>` : ''}
     `;
-  }
+    }
 
-  function closeModal() {
-    document.getElementById('overlay').style.display = 'none';
-    document.body.style.overflow = '';
-  }
+    function closeModal() {
+      document.getElementById('overlay').style.display = 'none';
+      document.body.style.overflow = '';
+    }
 
-  function handleOverlay(e) {
-    if (e.target.id === 'overlay') closeModal();
-  }
+    function handleOverlay(e) {
+      if (e.target.id === 'overlay') closeModal();
+    }
 
-  function setDiet(btn, diet) {
-    dietFilter = diet;
+    function setDiet(btn, diet) {
+      dietFilter = diet;
 
-    document.querySelectorAll('.filter-btn')
-      .forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+      document.querySelectorAll('.filter-btn')
+        .forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
-    applyFilters(document.getElementById('search').value.toLowerCase(), dietFilter);
-  }
+      applyFilters(document.getElementById('search').value.toLowerCase(), dietFilter);
+    }
 
-  function doSearch() {
-    applyFilters(document.getElementById('search').value.toLowerCase(), dietFilter);
-  }
+    function doSearch() {
+      applyFilters(document.getElementById('search').value.toLowerCase(), dietFilter);
+    }
 
-  function applyFilters(q, diet) {
-    filtered = allDinos.filter(d => {
-      const matchQ =
-        !q ||
-        d.name.toLowerCase().includes(q) ||
-        d.description.toLowerCase().includes(q) ||
-        d.diet.toLowerCase().includes(q);
+    function applyFilters(q, diet) {
+      filtered = allDinos.filter(d => {
+        const matchQ =
+          !q ||
+          d.name.toLowerCase().includes(q) ||
+          d.description.toLowerCase().includes(q) ||
+          d.diet.toLowerCase().includes(q);
 
-      const matchD =
-        !diet || d.diet.toLowerCase().includes(diet);
+        const matchD =
+          !diet || d.diet.toLowerCase().includes(diet);
 
-      return matchQ && matchD;
-    });
+        return matchQ && matchD;
+      });
 
-    renderGrid(true);
-  }
+      renderGrid(true);
+    }
 
-  document.getElementById('search').addEventListener('input', doSearch);
+    document.getElementById('search').addEventListener('input', doSearch);
 
-  init();
-</script>
+    init();
+  </script>
 </body>
+
 </html>
