@@ -20,7 +20,6 @@
       min-height: 100vh;
     }
 
-    /* ── NAV ── */
     .nav {
       display: flex;
       align-items: center;
@@ -75,7 +74,6 @@
       cursor: pointer;
     }
 
-    /* ── FILTERS ── */
     .filter-row {
       display: flex;
       gap: 6px;
@@ -103,7 +101,6 @@
       border-color: #111;
     }
 
-    /* ── GRID ── */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
@@ -183,7 +180,6 @@
       border: 1px solid #eee;
     }
 
-    /* ── STATE / LOADING ── */
     .state {
       display: flex;
       flex-direction: column;
@@ -210,7 +206,6 @@
       margin-top: 6px;
     }
 
-    /* ── PROGRESS BAR ── */
     .progress-wrap {
       width: 200px;
       height: 3px;
@@ -226,7 +221,6 @@
       transition: width .3s ease;
     }
 
-    /* ── LOAD MORE ── */
     .load-more-wrap { text-align: center; padding: 20px }
     .load-more {
       border: 1px solid #111;
@@ -241,7 +235,6 @@
     }
     .load-more:hover { background: #111; color: #fff }
 
-    /* ── OVERLAY + MODAL ── */
     .overlay {
       position: fixed;
       inset: 0;
@@ -471,7 +464,6 @@
     }
   }
 
-  // FIX 2: Use totalPages for correct pagination; fix "1186 of 50" bug
   async function fetchAllPages() {
     let page = 1, all = [], totalPages = null, totalDinos = null;
     const progressBar = document.getElementById('progress-bar');
@@ -480,29 +472,25 @@
       const r = await fetchWithRetry(`${BASE}/dinosaurs?page=${page}`);
       const data = await r.json();
 
-      // Read the correct fields from the API response
       if (totalPages === null) {
         totalPages = data.totalPages || null;
-        totalDinos = data.totalDinosaurs || data.total || data.count || null;
+        const candidate = data.totalDinosaurs || data.total || null;
+        totalDinos = (candidate && candidate > 50) ? candidate : null;
       }
 
       const items = data.dinosaurs || data.data || data.results || [];
       if (!items.length) break;
 
       all = all.concat(items);
-
-      // Update progress bar if we know total pages
       if (totalPages) {
         const pct = Math.round((page / totalPages) * 100);
         progressBar.style.width = pct + '%';
       }
-
       document.getElementById('state-sub').textContent =
         `Loaded ${all.length}${totalDinos ? ' of ' + totalDinos : ''} specimens…`;
 
-      // FIX: stop when we've reached the last page (not when items.length < 10)
       if (totalPages && page >= totalPages) break;
-      if (!totalPages && items.length < 50) break; // fallback if no totalPages
+      if (!totalPages && items.length < 50) break; 
       page++;
     }
 
