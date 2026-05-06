@@ -400,17 +400,19 @@
 </div>
 
 <script>
-  const API_URL = 'https://raw.githubusercontent.com/darkmoonsk/dinoapi/main/dinos.json';
+  const API_URL = 'https://dinoapi.onrender.com/dinos';
   const PAGE_SIZE = 40;
   let allDinos = [], filtered = [], displayed = 0, currentIdx = 0, dietFilter = '';
 
   function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+  // Updated: image is a direct URL string in the new API schema
   function getImageUrl(d) {
     if (typeof d.image === 'string' && d.image.startsWith('http')) return d.image;
     return '';
   }
 
+  // Updated: match "Herbivorous", "Carnivorous", "Omnivorous"
   function dietCode(diet) {
     const l = (diet || '').toLowerCase();
     if (l.includes('carnivorous')) return 'C';
@@ -419,6 +421,7 @@
     return '';
   }
 
+  // Truncate historical_period for the card pill (keep it concise)
   function truncatePeriod(period, maxLen = 28) {
     if (!period) return '';
     return period.length > maxLen ? period.slice(0, maxLen - 1) + '…' : period;
@@ -431,6 +434,7 @@
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const data = await r.json();
 
+      // The API returns an array directly
       const dinos = Array.isArray(data) ? data : (data.dinos || data.data || data.results || []);
       allDinos = dinos.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
@@ -537,6 +541,7 @@
         <i class="ti ti-file-unknown" style="font-size:90px" aria-hidden="true"></i></div>`;
     }
 
+    // Build modal pills: historical_period + diet
     const pills = [d.historical_period, d.diet].filter(Boolean);
     document.getElementById('modal-pills').innerHTML =
       pills.map(p => `<span class="modal-pill">${esc(p)}</span>`).join('');
@@ -599,6 +604,7 @@
     filtered = allDinos.filter(d => {
       const matchQ = !q || [d.name, d.description, d.diet, d.historical_period]
         .some(v => v && v.toLowerCase().includes(q));
+      // Diet filter: case-insensitive substring match on "herbivorous", "carnivorous", "omnivorous"
       const matchD = !diet || (d.diet || '').toLowerCase().includes(diet);
       return matchQ && matchD;
     });
