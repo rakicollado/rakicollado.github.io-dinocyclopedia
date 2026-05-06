@@ -106,8 +106,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     color: #ccc;
+    font-family: 'DM Mono', monospace;
   }
 
   .card-title {
@@ -189,55 +190,55 @@
     crossorigin="anonymous"></script>
 
   <script>
-  const API = 'https://dinosaur-facts-api.shultzlab.com/dinosaurs';
-  let allDinos = [];
+    const API = 'https://dinosaur-facts-api.shultzlab.com/dinosaurs';
+    let allDinos = [];
 
-  const norm = (d) => ({
-    name:        d.name        || 'Unknown',
-    image:       d.image       || '',
-    description: d.description || '',
-    diet:        (d.diet       || 'unknown').toLowerCase(),
-    period:      d.period      || '',
-  });
+    const norm = (d) => ({
+      name: d.name || 'Unknown',
+      image: d.image || '',
+      description: d.description || '',
+      diet: (d.diet || 'unknown').toLowerCase(),
+      period: d.period || '',
+    });
 
-  const esc = (s) =>
-    String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+    const esc = (s) =>
+      String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
 
-  const dietClass = (diet) =>
-    diet.includes('carniv') ? 'badge-carnivore' : 'badge-herbivore';
+    const dietClass = (diet) =>
+      diet.includes('carniv') ? 'badge-carnivore' : 'badge-herbivore';
 
-  const renderCards = (dinos) => {
-    const grid  = document.getElementById('grid');
-    const empty = document.getElementById('empty');
-    const count = document.getElementById('count');
+    const renderCards = (dinos) => {
+      const grid = document.getElementById('grid');
+      const empty = document.getElementById('empty');
+      const count = document.getElementById('count');
 
-    if (!dinos.length) {
-      grid.style.display  = 'none';
-      empty.style.display = '';
-      count.textContent   = '0 results';
-      return;
-    }
+      if (!dinos.length) {
+        grid.style.display = 'none';
+        empty.style.display = '';
+        count.textContent = '0 results';
+        return;
+      }
 
-    empty.style.display = 'none';
-    grid.style.display  = '';
-    count.textContent   = dinos.length + ' specimen' + (dinos.length !== 1 ? 's' : '');
+      empty.style.display = 'none';
+      grid.style.display = '';
+      count.textContent = dinos.length + ' specimen' + (dinos.length !== 1 ? 's' : '');
 
-    grid.innerHTML = dinos.map((raw, i) => {
-      const d   = norm(raw);
-      const idx = String(i + 1).padStart(3, '0');
-      const img = d.image
-        ? `<img src="${esc(d.image)}" class="card-img-top" alt="${esc(d.name)}" loading="lazy" onerror="this.outerHTML='<div class=\'img-placeholder\'>?</div>'" />`
-        : `<div class="img-placeholder">?</div>`;
-      const dietBadge   = d.diet !== 'unknown'
-        ? `<span class="badge-tag ${dietClass(d.diet)}">${esc(d.diet)}</span>` : '';
-      const periodBadge = d.period
-        ? `<span class="badge-tag badge-period">${esc(d.period)}</span>` : '';
+      grid.innerHTML = dinos.map((raw, i) => {
+        const d = norm(raw);
+        const idx = String(i + 1).padStart(3, '0');
+        const img = d.image
+          ? `<img src="${esc(d.image)}" class="card-img-top" alt="${esc(d.name)}" loading="lazy" onerror="this.outerHTML='<div class=\'img-placeholder\'>?</div>'" />`
+          : `<div class="img-placeholder">?</div>`;
+        const dietBadge = d.diet !== 'unknown'
+          ? `<span class="badge-tag ${dietClass(d.diet)}">${esc(d.diet)}</span>` : '';
+        const periodBadge = d.period
+          ? `<span class="badge-tag badge-period">${esc(d.period)}</span>` : '';
 
-      return `
+        return `
         <div class="col">
           <div class="card h-100 dino-card" style="animation-delay:${Math.min(i * 28, 600)}ms">
             <div class="overflow-hidden position-relative">
@@ -256,22 +257,35 @@
             </div>
           </div>
         </div>`;
-    }).join('');
-  };
+      }).join('');
+    };
 
-  const fetchDinosaurs = async () => {
-    const res  = await fetch(API);
-    const data = await res.json();
-    const raw  = Array.isArray(data) ? data : (data.dinosaurs || Object.values(data));
+    const fetchDinosaurs = async () => {
+      const res = await fetch(API);
+      const data = await res.json();
+      const raw = Array.isArray(data) ? data : (data.dinosaurs || Object.values(data));
 
-    allDinos = raw.sort((a, b) => norm(a).name.localeCompare(norm(b).name));
+      allDinos = raw.sort((a, b) => norm(a).name.localeCompare(norm(b).name));
 
-    document.getElementById('state').style.display = 'none';
-    renderCards(allDinos);
-  };
+      document.getElementById('state').style.display = 'none';
+      renderCards(allDinos);
+    };
 
-  fetchDinosaurs();
-</script>
+    fetchDinosaurs();
+
+    document.getElementById('search').addEventListener('input', function () {
+  const q = this.value.trim().toLowerCase();
+  renderCards(
+    q
+      ? allDinos.filter((raw) => {
+          const d = norm(raw);
+          return [d.name, d.description, d.diet, d.period]
+            .some((v) => v.toLowerCase().includes(q));
+        })
+      : allDinos
+  );
+});
+  </script>
 
 </body>
 
