@@ -400,28 +400,31 @@
 </div>
 
 <script>
-  const API_URL = 'https://dinoapi.onrender.com/dinos';
+  const API_URL = 'https://vikiru.github.io/restasaurus/api/v1/dinosaurs';
   const PAGE_SIZE = 40;
+
   let allDinos = [], filtered = [], displayed = 0, currentIdx = 0, dietFilter = '';
 
-  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-  // Updated: image is a direct URL string in the new API schema
-  function getImageUrl(d) {
-    if (typeof d.image === 'string' && d.image.startsWith('http')) return d.image;
-    return '';
+  function esc(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
-  // Updated: match "Herbivorous", "Carnivorous", "Omnivorous"
+  function getImageUrl(d) {
+    return d.image || d.image_url || d.img || '';
+  }
+
   function dietCode(diet) {
     const l = (diet || '').toLowerCase();
-    if (l.includes('carnivorous')) return 'C';
-    if (l.includes('herbivorous')) return 'H';
-    if (l.includes('omnivorous'))  return 'O';
+    if (l.includes('carn')) return 'C';
+    if (l.includes('herb')) return 'H';
+    if (l.includes('omniv')) return 'O';
     return '';
   }
 
-  // Truncate historical_period for the card pill (keep it concise)
   function truncatePeriod(period, maxLen = 28) {
     if (!period) return '';
     return period.length > maxLen ? period.slice(0, maxLen - 1) + '…' : period;
@@ -429,33 +432,49 @@
 
   async function init() {
     try {
-      document.getElementById('state-sub').textContent = 'Fetching all specimens…';
-      const r = await fetch(API_URL);
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const data = await r.json();
+      document.getElementById('state-sub').textContent = 'Fetching dinosaurs…';
 
-      // The API returns an array directly
-      const dinos = Array.isArray(data) ? data : (data.dinos || data.data || data.results || []);
-      allDinos = dinos.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      const res = await fetch(API_URL);
+      const data = await res.json();
+
+      console.log("RAW API:", data);
+
+      const raw = Array.isArray(data)
+        ? data
+        : (data.dinos || data.data || data.results || []);
+
+      // 🔥 normalize API fields so your UI never breaks
+      allDinos = raw.map(d => ({
+        name: d.name || 'Unknown',
+        image: getImageUrl(d),
+        diet: d.diet || '',
+        historical_period: d.historical_period || d.period || '',
+        description: d.description || ''
+      }));
+
+      allDinos.sort((a, b) => a.name.localeCompare(b.name));
 
       document.getElementById('state').style.display = 'none';
       document.getElementById('filter-row').style.display = 'flex';
+
       filtered = allDinos;
       displayed = 0;
       renderGrid(true);
+
     } catch (err) {
-      document.getElementById('state').innerHTML =
-        `<p class="state-title">Failed to load</p>
-         <p class="state-sub">${esc(err.message)}<br><br>The server may still be waking up. Please wait 30 seconds and try again.</p>
-         <button class="retry" onclick="location.reload()">Try again</button>`;
+      document.getElementById('state').innerHTML = `
+        <p class="state-title">Failed to load</p>
+        <p class="state-sub">${esc(err.message)}</p>
+        <button class="retry" onclick="location.reload()">Retry</button>
+      `;
     }
   }
 
   function renderGrid(reset) {
-    const grid    = document.getElementById('grid');
-    const empty   = document.getElementById('empty');
-    const lmw     = document.getElementById('load-more-wrap');
-    const count   = document.getElementById('count');
+    const grid = document.getElementById('grid');
+    const empty = document.getElementById('empty');
+    const lmw = document.getElementById('load-more-wrap');
+    const count = document.getElementById('count');
 
     if (!filtered.length) {
       grid.style.display = 'none';
@@ -466,150 +485,129 @@
     }
 
     empty.style.display = 'none';
-    grid.style.display  = '';
-    if (reset) { grid.innerHTML = ''; displayed = 0; }
+    grid.style.display = '';
+
+    if (reset) {
+      grid.innerHTML = '';
+      displayed = 0;
+    }
 
     const slice = filtered.slice(displayed, displayed + PAGE_SIZE);
-    const frag  = document.createDocumentFragment();
+    const frag = document.createDocumentFragment();
 
     slice.forEach((d, i) => {
-      const gi     = allDinos.indexOf(d);
-      const absI   = filtered.indexOf(d);
-      const dc     = dietCode(d.diet);
-      const period = d.historical_period || '';
-      const imgUrl = getImageUrl(d);
+      const gi = allDinos.indexOf(d);
+      const absI = filtered.indexOf(d);
+      const dc = dietCode(d.diet);
+      const period = d.historical_period;
+
+      const imgUrl = d.image;
 
       const col = document.createElement('div');
-      col.innerHTML = `<div class="card" style="animation-delay:${Math.min(i*20,400)}ms" onclick="openModal(${gi})">
-        <div class="card-img">
-          ${imgUrl
-            ? `<img src="${esc(imgUrl)}" alt="${esc(d.name)}" loading="lazy"
-                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-            : ''}
-          <div class="fallback-icon" ${imgUrl ? 'style="display:none"' : ''}>
-            <i class="ti ti-file-unknown" aria-hidden="true"></i>
+
+      col.innerHTML = `
+        <div class="card" onclick="openModal(${gi})">
+          <div class="card-img">
+            ${imgUrl
+              ? `<img src="${esc(imgUrl)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+              : ''
+            }
+            <div class="fallback-icon" ${imgUrl ? 'style="display:none"' : ''}>
+              🦕
+            </div>
+
+            <span class="card-num">${String(absI + 1).padStart(3, '0')}</span>
+
+            ${dc ? `<span class="diet-badge diet-${dc}">${dc}</span>` : ''}
           </div>
-          <span class="card-num">${String(absI + 1).padStart(3, '0')}</span>
-          ${dc ? `<span class="diet-badge diet-${dc}">${dc==='C'?'Carn':dc==='H'?'Herb':'Omni'}</span>` : ''}
-        </div>
-        <div class="card-body">
-          <div class="card-name">${esc(d.name || 'Unknown')}</div>
-          <div class="card-pills">
-            ${period ? `<span class="pill" title="${esc(period)}">${esc(truncatePeriod(period))}</span>` : ''}
-            ${dc     ? `<span class="pill">${esc(d.diet)}</span>` : ''}
+
+          <div class="card-body">
+            <div class="card-name">${esc(d.name)}</div>
+
+            <div class="card-pills">
+              ${period ? `<span class="pill">${esc(truncatePeriod(period))}</span>` : ''}
+              ${d.diet ? `<span class="pill">${esc(d.diet)}</span>` : ''}
+            </div>
           </div>
         </div>
-      </div>`;
+      `;
+
       frag.appendChild(col);
     });
 
     grid.appendChild(frag);
     displayed += slice.length;
-    count.textContent = filtered.length + ' specimen' + (filtered.length !== 1 ? 's' : '');
+
+    count.textContent = `${filtered.length} specimen${filtered.length !== 1 ? 's' : ''}`;
     lmw.style.display = displayed < filtered.length ? '' : 'none';
   }
 
-  function showMore() { renderGrid(false); }
+  function showMore() {
+    renderGrid(false);
+  }
 
   function openModal(gi) {
     currentIdx = gi;
-    showModal(gi);
+    const d = allDinos[gi];
+
     document.getElementById('overlay').style.display = 'flex';
     document.body.style.overflow = 'hidden';
-  }
 
-  function showModal(gi) {
-    const d = allDinos[gi];
-    if (!d) return;
-    currentIdx = gi;
+    document.getElementById('modal-name').textContent = d.name;
+    document.getElementById('modal-desc').textContent = d.description;
 
-    const pos = filtered.indexOf(d);
-    document.getElementById('modal-num').textContent =
-      String(pos + 1).padStart(3, '0') + ' / ' + String(filtered.length).padStart(3, '0');
-    document.getElementById('modal-pos').textContent =
-      String(gi + 1).padStart(3, '0') + ' of ' + String(allDinos.length).padStart(3, '0') + ' total';
-    document.getElementById('modal-name').textContent = d.name || 'Unknown';
-    document.getElementById('modal-desc').textContent = d.description || '';
+    const img = d.image;
+    document.getElementById('modal-hero-wrap').innerHTML = img
+      ? `<img class="modal-hero" src="${esc(img)}">`
+      : `<div class="modal-hero-fallback">🦕</div>`;
 
-    const imgUrl   = getImageUrl(d);
-    const heroWrap = document.getElementById('modal-hero-wrap');
-    if (imgUrl) {
-      heroWrap.innerHTML = `<img class="modal-hero" src="${esc(imgUrl)}" alt="${esc(d.name)}"
-        onerror="this.outerHTML='<div class=modal-hero-fallback><i class=\\'ti ti-file-unknown\\' style=\\'font-size:90px\\'></i></div>'">`;
-    } else {
-      heroWrap.innerHTML = `<div class="modal-hero-fallback">
-        <i class="ti ti-file-unknown" style="font-size:90px" aria-hidden="true"></i></div>`;
-    }
-
-    // Build modal pills: historical_period + diet
-    const pills = [d.historical_period, d.diet].filter(Boolean);
-    document.getElementById('modal-pills').innerHTML =
-      pills.map(p => `<span class="modal-pill">${esc(p)}</span>`).join('');
-
-    document.getElementById('modal-attrib').innerHTML = '';
-
-    document.getElementById('btn-prev').disabled = findAdjacentInFiltered(gi, -1) === -1;
-    document.getElementById('btn-next').disabled = findAdjacentInFiltered(gi,  1) === -1;
-    document.getElementById('modal').scrollTop = 0;
-  }
-
-  function findAdjacentInFiltered(gi, dir) {
-    const pos  = filtered.indexOf(allDinos[gi]);
-    const next = pos + dir;
-    if (next < 0 || next >= filtered.length) return -1;
-    return allDinos.indexOf(filtered[next]);
-  }
-
-  function navigate(dir) {
-    const n = findAdjacentInFiltered(currentIdx, dir);
-    if (n !== -1) showModal(n);
+    document.getElementById('modal-pills').innerHTML = `
+      ${d.historical_period ? `<span class="modal-pill">${esc(d.historical_period)}</span>` : ''}
+      ${d.diet ? `<span class="modal-pill">${esc(d.diet)}</span>` : ''}
+    `;
   }
 
   function closeModal() {
     document.getElementById('overlay').style.display = 'none';
     document.body.style.overflow = '';
   }
+
   function handleOverlay(e) {
-    if (e.target === document.getElementById('overlay')) closeModal();
-  }
-
-  document.addEventListener('keydown', e => {
-    if (document.getElementById('overlay').style.display !== 'none') {
-      if (e.key === 'Escape')      closeModal();
-      if (e.key === 'ArrowLeft')   navigate(-1);
-      if (e.key === 'ArrowRight')  navigate(1);
-    }
-  });
-
-  let searchTimer;
-  document.getElementById('search').addEventListener('input', () => {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(doSearch, 200);
-  });
-  document.getElementById('search').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doSearch();
-  });
-
-  function doSearch() {
-    applyFilters(document.getElementById('search').value.trim().toLowerCase(), dietFilter);
+    if (e.target.id === 'overlay') closeModal();
   }
 
   function setDiet(btn, diet) {
     dietFilter = diet;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-    doSearch();
+
+    document.querySelectorAll('.filter-btn')
+      .forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    applyFilters(document.getElementById('search').value.toLowerCase(), dietFilter);
+  }
+
+  function doSearch() {
+    applyFilters(document.getElementById('search').value.toLowerCase(), dietFilter);
   }
 
   function applyFilters(q, diet) {
     filtered = allDinos.filter(d => {
-      const matchQ = !q || [d.name, d.description, d.diet, d.historical_period]
-        .some(v => v && v.toLowerCase().includes(q));
-      // Diet filter: case-insensitive substring match on "herbivorous", "carnivorous", "omnivorous"
-      const matchD = !diet || (d.diet || '').toLowerCase().includes(diet);
+      const matchQ =
+        !q ||
+        d.name.toLowerCase().includes(q) ||
+        d.description.toLowerCase().includes(q) ||
+        d.diet.toLowerCase().includes(q);
+
+      const matchD =
+        !diet || d.diet.toLowerCase().includes(diet);
+
       return matchQ && matchD;
     });
+
     renderGrid(true);
   }
+
+  document.getElementById('search').addEventListener('input', doSearch);
 
   init();
 </script>
