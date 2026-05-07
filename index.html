@@ -10,35 +10,61 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.7);
+      --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+      --glass-blur: blur(16px);
+      --nav-bg: rgba(255, 255, 255, 0.72);
+      --accent: #111;
+      --muted: #888;
+      --surface: #f3f3f0;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
-      padding: 0
+      padding: 0;
     }
 
     body {
       font-family: 'DM Mono', monospace;
-      background: #fff;
+      background: #e8e6df;
       color: #111;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
     }
 
     .app {
       position: relative;
       min-height: 100vh;
+      z-index: 1;
     }
 
     .nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
-      border-bottom: 1px solid #e0e0e0;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--glass-border);
       position: sticky;
       top: 0;
-      background: #fff;
+      background: var(--nav-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
       z-index: 10;
       gap: 12px;
       flex-wrap: wrap;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
     }
 
     .wordmark {
@@ -49,7 +75,7 @@
     }
 
     .wordmark em {
-      font-style: italic
+      font-style: italic;
     }
 
     .nav-right {
@@ -63,66 +89,85 @@
 
     .count {
       font-size: .68rem;
-      color: #777;
-      white-space: nowrap
+      color: var(--muted);
+      white-space: nowrap;
     }
 
     .search-wrap {
-      display: flex
+      display: flex;
     }
 
     .search-wrap input {
-      border: 1px solid #ccc;
+      border: 1px solid rgba(0, 0, 0, 0.15);
       border-right: none;
-      border-radius: 4px 0 0 4px;
-      padding: 5px 10px;
+      border-radius: 6px 0 0 6px;
+      padding: 6px 12px;
       font-family: 'DM Mono', monospace;
       font-size: .72rem;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
       color: #111;
       outline: none;
-      width: 170px;
+      width: 180px;
+      transition: background .2s;
+    }
+
+    .search-wrap input:focus {
+      background: rgba(255, 255, 255, 0.88);
     }
 
     .search-wrap button {
       border: 1px solid #111;
-      border-radius: 0 4px 4px 0;
-      padding: 5px 10px;
+      border-radius: 0 6px 6px 0;
+      padding: 6px 14px;
       background: #111;
       color: #fff;
       font-family: 'DM Mono', monospace;
       font-size: .65rem;
       letter-spacing: .06em;
       cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+
+    .search-wrap button:hover {
+      background: #333;
     }
 
     .filter-row {
       display: flex;
       gap: 6px;
-      padding: 10px 16px;
-      border-bottom: 1px solid #f0f0f0;
+      padding: 10px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
       flex-wrap: wrap;
       align-items: center;
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .filter-label {
       font-size: .65rem;
-      color: #777;
+      color: var(--muted);
       letter-spacing: .04em;
-      margin-right: 2px
+      margin-right: 2px;
     }
 
     .filter-btn {
       font-family: 'DM Mono', monospace;
       font-size: .62rem;
       letter-spacing: .04em;
-      padding: 3px 10px;
-      border: 1px solid #ccc;
+      padding: 4px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.18);
       border-radius: 99px;
-      background: transparent;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(6px);
       cursor: pointer;
-      color: #777;
-      transition: all .15s;
+      color: #555;
+      transition: all .18s;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.8);
     }
 
     .filter-btn.active {
@@ -133,27 +178,33 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-      gap: 12px;
-      padding: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+      padding: 20px;
       align-items: start;
     }
 
     .card {
-      border: 1px solid #ddd;
-      border-radius: 6px;
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
-      transition: transform .15s, box-shadow .15s;
-      animation: rise .3s ease forwards;
+      transition: transform .18s, box-shadow .18s;
+      animation: rise .32s ease forwards;
       opacity: 0;
-      transform: translateY(8px);
-      background: #fff;
+      transform: translateY(10px);
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: var(--glass-shadow);
+      display: flex;
+      flex-direction: column;
+      height: 320px;
     }
 
     .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, .08);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.14);
     }
 
     .card.active-card {
@@ -165,14 +216,15 @@
     @keyframes rise {
       to {
         opacity: 1;
-        transform: translateY(0)
+        transform: translateY(0);
       }
     }
 
     .card-img {
-      height: 155px;
-      background: #f5f5f5;
-      border-bottom: 1px solid #ddd;
+      height: 160px;
+      flex-shrink: 0;
+      background: rgba(245, 245, 242, 0.8);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.6);
       overflow: hidden;
       position: relative;
       display: flex;
@@ -183,26 +235,57 @@
     .card-img img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      display: block
+      object-fit: contain;
+      display: block;
+      padding: 6px;
+      transition: transform .22s;
+    }
+
+    .card-img img:hover {
+      transform: scale(1.04);
+    }
+
+    .img-expand-btn {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      width: 26px;
+      height: 26px;
+      background: rgba(0, 0, 0, 0.55);
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: .8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity .18s;
+      z-index: 2;
+    }
+
+    .card-img:hover .img-expand-btn {
+      opacity: 1;
     }
 
     .fallback-icon {
-      font-size: 52px;
-      color: #ccc
+      font-size: 48px;
+      color: #ccc;
     }
 
     .card-num {
       position: absolute;
       top: 6px;
       left: 6px;
-      background: #111;
+      background: rgba(0, 0, 0, 0.7);
       color: #fff;
       font-family: 'DM Mono', monospace;
-      font-size: .58rem;
+      font-size: .55rem;
       padding: 2px 5px;
-      border-radius: 2px;
+      border-radius: 3px;
       z-index: 1;
+      backdrop-filter: blur(4px);
     }
 
     .diet-badge {
@@ -210,70 +293,83 @@
       top: 6px;
       right: 6px;
       font-family: 'DM Mono', monospace;
-      font-size: .55rem;
-      padding: 2px 6px;
+      font-size: .52rem;
+      padding: 2px 7px;
       border-radius: 99px;
       z-index: 1;
       border: 1px solid;
+      backdrop-filter: blur(4px);
     }
 
     .diet-C {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.85);
       border-color: #000;
-      color: #000
+      color: #000;
     }
 
     .diet-H {
-      background: #000;
+      background: rgba(0, 0, 0, 0.78);
       border-color: #000;
-      color: #fff
+      color: #fff;
     }
 
     .diet-O {
-      background: #888;
+      background: rgba(136, 136, 136, 0.82);
       border-color: #888;
-      color: #fff
+      color: #fff;
     }
 
     .card-body {
-      padding: 10px 12px;
+      padding: 10px 12px 12px;
       display: flex;
       flex-direction: column;
-      gap: 5px
+      gap: 5px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
     }
 
     .card-name {
       font-family: 'DM Serif Display', serif;
-      font-size: .95rem;
+      font-size: .92rem;
       letter-spacing: -.02em;
-      line-height: 1.2
+      line-height: 1.2;
     }
 
     .card-desc {
-      font-size: .68rem;
-      color: #888;
-      line-height: 1.45;
+      font-size: .65rem;
+      color: #666;
+      line-height: 1.5;
+      display: none;
+      overflow: hidden;
       display: -webkit-box;
-      line-clamp: 2;
+      line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      max-height: 0;
+      transition: max-height .25s ease;
+    }
+
+    .card-desc.visible {
+      max-height: 80px;
+      display: -webkit-box;
     }
 
     .card-pills {
       display: flex;
       flex-wrap: wrap;
       gap: 3px;
-      margin-top: 2px
+      margin-top: auto;
     }
 
     .pill {
-      font-size: .58rem;
-      letter-spacing: .03em;
-      color: #777;
-      background: #f5f5f5;
+      font-size: .56rem;
+      letter-spacing: .02em;
+      color: #666;
+      background: rgba(255, 255, 255, 0.6);
       border-radius: 99px;
       padding: 2px 7px;
-      border: 1px solid #eee;
+      border: 1px solid rgba(0, 0, 0, 0.1);
       max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -281,15 +377,17 @@
     }
 
     .card-hint {
-      font-size: .58rem;
-      color: #ccc;
-      letter-spacing: .04em;
-      margin-top: 6px;
+      font-size: .56rem;
+      color: #aaa;
+      letter-spacing: .03em;
       display: flex;
       align-items: center;
       gap: 3px;
     }
-    .card-hint i { font-size: .7rem; }
+
+    .card-hint i {
+      font-size: .68rem;
+    }
 
     .state {
       display: flex;
@@ -303,30 +401,37 @@
 
     .state-title {
       font-family: 'DM Serif Display', serif;
-      font-size: 1.1rem
+      font-size: 1.1rem;
     }
 
     .state-sub {
       font-size: .72rem;
-      color: #777;
+      color: var(--muted);
       max-width: 320px;
-      line-height: 1.6
+      line-height: 1.6;
     }
 
     .pulse {
       font-size: 2rem;
-      animation: pulse 1.4s ease-in-out infinite
+      animation: pulse 1.4s ease-in-out infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: .4 }
-      50% { opacity: 1 }
+
+      0%,
+      100% {
+        opacity: .35
+      }
+
+      50% {
+        opacity: 1
+      }
     }
 
     .progress-wrap {
       width: 200px;
       height: 3px;
-      background: #eee;
+      background: rgba(0, 0, 0, 0.1);
       border-radius: 99px;
       overflow: hidden;
     }
@@ -350,109 +455,150 @@
     }
 
     #empty i {
-      font-size: 2.5rem
+      font-size: 2.5rem;
     }
 
     .load-more-wrap {
       text-align: center;
-      padding: 20px
+      padding: 24px;
     }
 
     .load-more {
-      border: 1px solid #111;
-      border-radius: 4px;
-      padding: 8px 22px;
-      background: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 6px;
+      padding: 9px 26px;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(8px);
       font-family: 'DM Mono', monospace;
       font-size: .65rem;
       letter-spacing: .06em;
       cursor: pointer;
-      transition: background .15s;
+      transition: background .18s, color .18s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
     }
 
     .load-more:hover {
       background: #111;
       color: #fff;
+      border-color: #111;
     }
 
     .panel-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.45);
+      background: rgba(0, 0, 0, 0.4);
       z-index: 100;
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
       animation: fadein .2s ease;
     }
-    @keyframes fadein { from { opacity: 0 } to { opacity: 1 } }
+
+    @keyframes fadein {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
 
     .panel {
       position: fixed;
-      top: 0; right: 0;
+      top: 0;
+      right: 0;
       width: min(560px, 100vw);
       height: 100vh;
-      background: #fff;
+      background: rgba(245, 244, 240, 0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-left: 1px solid rgba(255, 255, 255, 0.7);
       z-index: 101;
       display: flex;
       flex-direction: column;
       transform: translateX(100%);
-      transition: transform .28s cubic-bezier(.4,0,.2,1);
-      box-shadow: -8px 0 48px rgba(0,0,0,.18);
+      transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+      box-shadow: -12px 0 60px rgba(0, 0, 0, 0.15);
     }
-    .panel.open { transform: translateX(0); }
 
-    /* Panel top bar */
+    .panel.open {
+      transform: translateX(0);
+    }
+
     .panel-header {
       display: flex;
       align-items: center;
       padding: 12px 16px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.6);
       flex-shrink: 0;
       gap: 8px;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(8px);
     }
+
     .panel-counter {
       font-size: .62rem;
       color: #aaa;
       letter-spacing: .04em;
       min-width: 80px;
     }
+
     .panel-nav-btns {
       display: flex;
       gap: 6px;
       margin-left: auto;
     }
+
     .panel-nav-btn {
       font-family: 'DM Mono', monospace;
       font-size: .6rem;
       letter-spacing: .05em;
       padding: 5px 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.18);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.6);
       color: #111;
       cursor: pointer;
       transition: all .12s;
       display: flex;
       align-items: center;
       gap: 5px;
+      backdrop-filter: blur(4px);
     }
-    .panel-nav-btn:hover:not(:disabled) { background: #111; color: #fff; border-color: #111; }
-    .panel-nav-btn:disabled { opacity: .28; cursor: default; }
+
+    .panel-nav-btn:hover:not(:disabled) {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+
+    .panel-nav-btn:disabled {
+      opacity: .28;
+      cursor: default;
+    }
 
     .panel-close {
-      width: 30px; height: 30px;
-      display: flex; align-items: center; justify-content: center;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background: none;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.5);
       cursor: pointer;
       color: #777;
       font-size: 1rem;
       transition: all .12s;
       flex-shrink: 0;
     }
-    .panel-close:hover { background: #111; color: #fff; border-color: #111; }
+
+    .panel-close:hover {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
 
     .panel-body {
       flex: 1;
@@ -463,68 +609,188 @@
     .panel-hero {
       width: 100%;
       height: 280px;
-      object-fit: cover;
+      object-fit: contain;
       display: block;
-      background: #f5f5f5;
+      background: rgba(245, 245, 242, 0.6);
+      padding: 12px;
     }
+
     .panel-hero-fallback {
       width: 100%;
       height: 200px;
-      background: #f5f5f5;
+      background: rgba(245, 245, 242, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
       color: #d0d0d0;
       font-size: 72px;
     }
+
     .panel-content {
       padding: 24px 24px 40px;
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
+
     .panel-name {
       font-family: 'DM Serif Display', serif;
       font-size: 2rem;
       letter-spacing: -.03em;
       line-height: 1.15;
     }
+
     .panel-pills {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
     }
+
     .panel-pill {
       font-size: .62rem;
       letter-spacing: .03em;
       color: #555;
-      background: #f5f5f5;
+      background: rgba(255, 255, 255, 0.65);
       border-radius: 99px;
       padding: 3px 10px;
-      border: 1px solid #e8e8e8;
+      border: 1px solid rgba(0, 0, 0, 0.12);
     }
-    .panel-pill-C { background: #111; color: #fff; border-color: #111; }
-    .panel-pill-H { background: #fff; color: #111; border-color: #111; }
-    .panel-pill-O { background: #888; color: #fff; border-color: #888; }
-    .panel-divider { height: 1px; background: #f0f0f0; }
+
+    .panel-pill-C {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+
+    .panel-pill-H {
+      background: rgba(255, 255, 255, 0.9);
+      color: #111;
+      border-color: #111;
+    }
+
+    .panel-pill-O {
+      background: #888;
+      color: #fff;
+      border-color: #888;
+    }
+
+    .panel-divider {
+      height: 1px;
+      background: rgba(0, 0, 0, 0.08);
+    }
+
     .panel-desc {
       font-size: .8rem;
       color: #333;
       line-height: 1.82;
     }
+
     .panel-attrib {
       font-size: .6rem;
       color: #bbb;
       line-height: 1.6;
       padding-top: 8px;
-      border-top: 1px solid #f5f5f5;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
     }
-    .panel-attrib a { color: #999; }
+
+    .panel-attrib a {
+      color: #999;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      animation: fadein .18s ease;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+      animation: lbrise .22s ease;
+    }
+
+    @keyframes lbrise {
+      from {
+        opacity: 0;
+        transform: scale(.94)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1)
+      }
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'DM Serif Display', serif;
+      font-size: .9rem;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: -.01em;
+      pointer-events: none;
+    }
 
     @media (max-width: 480px) {
-      .panel { width: 100vw; }
-      .panel-hero { height: 200px; }
-      .panel-name { font-size: 1.6rem; }
+      .panel {
+        width: 100vw;
+      }
+
+      .panel-hero {
+        height: 200px;
+      }
+
+      .panel-name {
+        font-size: 1.6rem;
+      }
+
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .card {
+        height: 290px;
+      }
     }
   </style>
 </head>
@@ -552,7 +818,7 @@
     </div>
 
     <div id="state" class="state">
-      <div class="pulse"><i class="ti ti-mood-smile" aria-hidden="true"></i></div>
+      <div class="pulse"><i class="ti ti-mood-smile"></i></div>
       <p class="state-title">Loading Dinocyclopedia…</p>
       <p class="state-sub" id="state-sub">Waking up the server — this may take 15–60 s on first load.</p>
       <div class="progress-wrap">
@@ -585,11 +851,15 @@
           Next <i class="ti ti-arrow-right"></i>
         </button>
       </div>
-      <button class="panel-close" onclick="closePanel()" aria-label="Close">
-        <i class="ti ti-x"></i>
-      </button>
+      <button class="panel-close" onclick="closePanel()" aria-label="Close"><i class="ti ti-x"></i></button>
     </div>
     <div class="panel-body" id="panel-body"></div>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()"><i class="ti ti-x"></i></button>
+    <img id="lightbox-img" src="" alt="">
+    <span class="lightbox-caption" id="lightbox-caption"></span>
   </div>
 
   <script>
@@ -600,10 +870,16 @@
     let filtered = [];
     let displayed = 0;
     let dietFilter = '';
-    let currentPanelIdx = -1; 
+    let currentPanelIdx = -1;
 
     function esc(s) {
       return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function safeStr(v) {
+      if (v === null || v === undefined) return '';
+      if (typeof v === 'object') return '';
+      return String(v);
     }
 
     function getImageUrl(d) {
@@ -613,7 +889,7 @@
     }
 
     function dietCode(diet) {
-      const l = (diet || '').toLowerCase();
+      const l = safeStr(diet).toLowerCase();
       if (l.includes('carnivore') || l.includes('carnivorous')) return 'C';
       if (l.includes('herbivore') || l.includes('herbivorous')) return 'H';
       if (l.includes('omnivore') || l.includes('omnivorous')) return 'O';
@@ -621,8 +897,8 @@
     }
 
     function truncatePeriod(s, max = 28) {
-      if (!s) return '';
-      return s.length > max ? s.slice(0, max - 1) + '…' : s;
+      const str = safeStr(s);
+      return str.length > max ? str.slice(0, max - 1) + '…' : str;
     }
 
     function buildAttrib(d) {
@@ -646,10 +922,8 @@
         try {
           const r = await fetch(url);
           if (r.ok) return r;
-          if (attempt < retries) {
-            setStateSub(`Server waking up… retry ${attempt}/${retries}`);
-            await sleep(delay);
-          } else throw new Error(`HTTP ${r.status}`);
+          if (attempt < retries) { setStateSub(`Server waking up… retry ${attempt}/${retries}`); await sleep(delay); }
+          else throw new Error(`HTTP ${r.status}`);
         } catch (err) {
           if (attempt === retries) throw err;
           setStateSub(`Connection error, retrying ${attempt}/${retries}…`);
@@ -664,29 +938,23 @@
     async function fetchAllPages() {
       let page = 1, all = [], totalPages = null, totalDinos = null;
       const bar = document.getElementById('progress-bar');
-
       while (true) {
         const r = await fetchWithRetry(`${BASE}/dinosaurs?page=${page}`);
         const data = await r.json();
-
         if (totalPages === null) {
           totalPages = data.totalPages || null;
           const cand = data.totalDinosaurs || data.total || null;
           totalDinos = (cand && cand > 50) ? cand : null;
         }
-
         const items = data.dinosaurs || data.data || data.results || [];
         if (!items.length) break;
-
         all = all.concat(items);
         if (totalPages) bar.style.width = Math.round((page / totalPages) * 100) + '%';
         setStateSub(`Loaded ${all.length}${totalDinos ? ' of ' + totalDinos : ''} specimens…`);
-
         if (totalPages && page >= totalPages) break;
         if (!totalPages && items.length < 50) break;
         page++;
       }
-
       bar.style.width = '100%';
       return all;
     }
@@ -694,7 +962,7 @@
     async function init() {
       try {
         const dinos = await fetchAllPages();
-        allDinos = dinos.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        allDinos = dinos.sort((a, b) => safeStr(a.name).localeCompare(safeStr(b.name)));
         document.getElementById('state').style.display = 'none';
         document.getElementById('filter-row').style.display = 'flex';
         filtered = allDinos;
@@ -712,13 +980,13 @@
       const grid = document.getElementById('grid');
       const empty = document.getElementById('empty');
       const lmw = document.getElementById('load-more-wrap');
-      const count = document.getElementById('count');
+      const countEl = document.getElementById('count');
 
       if (!filtered.length) {
         grid.style.display = 'none';
         empty.style.display = 'flex';
         lmw.style.display = 'none';
-        count.textContent = '0 results';
+        countEl.textContent = '0 results';
         return;
       }
 
@@ -734,43 +1002,82 @@
         const gi = allDinos.indexOf(d);
         const absI = filtered.indexOf(d);
         const dc = dietCode(d.diet);
-        const temporal = d.temporalRange || '';
-        const loco = d.locomotionType || '';
+        const temporal = safeStr(d.temporalRange);
+        const loco = safeStr(d.locomotionType);
         const imgUrl = getImageUrl(d);
 
         const wrapper = document.createElement('div');
         wrapper.innerHTML = `
-        <div class="card" id="card-${gi}" style="animation-delay:${Math.min(i * 20, 400)}ms" onclick="openPanel(${absI})">
-          <div class="card-img">
-            ${imgUrl
+      <div class="card" id="card-${gi}" style="animation-delay:${Math.min(i * 18, 400)}ms">
+        <div class="card-img" onclick="handleCardImgClick(event,${absI})">
+          ${imgUrl
             ? `<img src="${esc(imgUrl)}" alt="${esc(d.name)}" loading="lazy"
-                      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
             : ''}
-            <div class="fallback-icon" ${imgUrl ? 'style="display:none"' : ''}>
-              <i class="ti ti-file-unknown" aria-hidden="true"></i>
-            </div>
-            <span class="card-num">${String(absI + 1).padStart(3, '0')}</span>
-            ${dc ? `<span class="diet-badge diet-${dc}">${dc === 'C' ? 'Carn' : dc === 'H' ? 'Herb' : 'Omni'}</span>` : ''}
+          <div class="fallback-icon" ${imgUrl ? 'style="display:none"' : ''}>
+            <i class="ti ti-file-unknown"></i>
           </div>
-          <div class="card-body">
-            <div class="card-name">${esc(d.name || 'Unknown')}</div>
-            ${d.description ? `<div class="card-desc">${esc(d.description)}</div>` : ''}
-            <div class="card-pills">
-              ${temporal ? `<span class="pill" title="${esc(temporal)}">${esc(truncatePeriod(temporal))}</span>` : ''}
-              ${loco ? `<span class="pill">${esc(loco)}</span>` : ''}
-              ${d.diet ? `<span class="pill">${esc(d.diet)}</span>` : ''}
-            </div>
-            <div class="card-hint"><i class="ti ti-arrow-right"></i> View details</div>
+          ${imgUrl ? `<button class="img-expand-btn" title="View full image"><i class="ti ti-arrows-maximize"></i></button>` : ''}
+          <span class="card-num">${String(absI + 1).padStart(3, '0')}</span>
+          ${dc ? `<span class="diet-badge diet-${dc}">${dc === 'C' ? 'Carn' : dc === 'H' ? 'Herb' : 'Omni'}</span>` : ''}
+        </div>
+        <div class="card-body" onclick="toggleCardDesc(event,${gi})">
+          <div class="card-name">${esc(d.name || 'Unknown')}</div>
+          ${d.description ? `<div class="card-desc" id="desc-${gi}">${esc(d.description)}</div>` : ''}
+          <div class="card-pills">
+            ${temporal ? `<span class="pill" title="${esc(temporal)}">${esc(truncatePeriod(temporal))}</span>` : ''}
+            ${loco ? `<span class="pill">${esc(loco)}</span>` : ''}
+            ${d.diet ? `<span class="pill">${esc(d.diet)}</span>` : ''}
           </div>
-        </div>`;
+          <div class="card-hint"><i class="ti ti-arrows-maximize"></i> Tap for details</div>
+        </div>
+      </div>`;
         frag.appendChild(wrapper);
       });
 
       grid.appendChild(frag);
       displayed += slice.length;
 
-      count.textContent = filtered.length + ' specimen' + (filtered.length !== 1 ? 's' : '');
+      countEl.textContent = filtered.length + ' specimen' + (filtered.length !== 1 ? 's' : '');
       lmw.style.display = displayed < filtered.length ? '' : 'none';
+    }
+
+    function handleCardImgClick(e, absI) {
+      e.stopPropagation();
+      const d = filtered[absI];
+      if (!d) return;
+      const imgUrl = getImageUrl(d);
+      if (imgUrl) {
+        openLightbox(imgUrl, safeStr(d.name));
+      } else {
+        openPanel(absI);
+      }
+    }
+
+    function toggleCardDesc(e, gi) {
+      e.stopPropagation();
+      const descEl = document.getElementById(`desc-${gi}`);
+      if (descEl) {
+        descEl.classList.toggle('visible');
+      }
+      const d = allDinos[gi];
+      if (!d) return;
+      const absI = filtered.indexOf(d);
+      if (absI === -1) return;
+      openPanel(absI);
+    }
+
+    function openLightbox(url, name) {
+      const lb = document.getElementById('lightbox');
+      document.getElementById('lightbox-img').src = url;
+      document.getElementById('lightbox-img').alt = name;
+      document.getElementById('lightbox-caption').textContent = name;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
     }
 
     function openPanel(fi) {
@@ -799,35 +1106,34 @@
     function renderPanel(fi) {
       const d = filtered[fi];
       if (!d) return;
-
       const imgUrl = getImageUrl(d);
       const dc = dietCode(d.diet);
       const attrib = buildAttrib(d);
+      const dietClass = dc ? ` panel-pill-${dc}` : '';
 
       document.getElementById('panel-counter').textContent =
         String(fi + 1).padStart(3, '0') + ' / ' + String(filtered.length).padStart(3, '0');
       document.getElementById('btn-prev').disabled = fi <= 0;
       document.getElementById('btn-next').disabled = fi >= filtered.length - 1;
 
-      const dietClass = dc ? ` panel-pill-${dc}` : '';
-
       document.getElementById('panel-body').innerHTML = `
-        ${imgUrl
+      ${imgUrl
           ? `<img class="panel-hero" src="${esc(imgUrl)}" alt="${esc(d.name)}"
-                  onerror="this.outerHTML='<div class=panel-hero-fallback><i class=\\'ti ti-file-unknown\\'></i></div>'">`
+                style="cursor:zoom-in" onclick="openLightbox('${esc(imgUrl)}','${esc(safeStr(d.name))}')"
+                onerror="this.outerHTML='<div class=panel-hero-fallback><i class=\\'ti ti-file-unknown\\'></i></div>'">`
           : `<div class="panel-hero-fallback"><i class="ti ti-file-unknown"></i></div>`}
-        <div class="panel-content">
-          <div class="panel-name">${esc(d.name || 'Unknown')}</div>
-          <div class="panel-pills">
-            ${d.diet          ? `<span class="panel-pill${dietClass}">${esc(d.diet)}</span>` : ''}
-            ${d.temporalRange ? `<span class="panel-pill">${esc(d.temporalRange)}</span>` : ''}
-            ${d.locomotionType? `<span class="panel-pill">${esc(d.locomotionType)}</span>` : ''}
-            ${d.classificationInfo ? `<span class="panel-pill">${esc(d.classificationInfo)}</span>` : ''}
-          </div>
-          <div class="panel-divider"></div>
-          <div class="panel-desc">${esc(d.description || 'No description available.')}</div>
-          ${attrib ? `<div class="panel-attrib">${attrib}</div>` : ''}
-        </div>`;
+      <div class="panel-content">
+        <div class="panel-name">${esc(d.name || 'Unknown')}</div>
+        <div class="panel-pills">
+          ${d.diet ? `<span class="panel-pill${dietClass}">${esc(d.diet)}</span>` : ''}
+          ${d.temporalRange ? `<span class="panel-pill">${esc(safeStr(d.temporalRange))}</span>` : ''}
+          ${d.locomotionType ? `<span class="panel-pill">${esc(safeStr(d.locomotionType))}</span>` : ''}
+          ${d.classificationInfo ? `<span class="panel-pill">${esc(safeStr(d.classificationInfo))}</span>` : ''}
+        </div>
+        <div class="panel-divider"></div>
+        <div class="panel-desc">${esc(d.description || 'No description available.')}</div>
+        ${attrib ? `<div class="panel-attrib">${attrib}</div>` : ''}
+      </div>`;
 
       document.getElementById('panel-body').scrollTop = 0;
     }
@@ -848,10 +1154,14 @@
     }
 
     document.addEventListener('keydown', e => {
+      if (document.getElementById('lightbox').classList.contains('open')) {
+        if (e.key === 'Escape') closeLightbox();
+        return;
+      }
       if (currentPanelIdx === -1) return;
-      if (e.key === 'Escape')      closePanel();
-      if (e.key === 'ArrowLeft')   navigatePanel(-1);
-      if (e.key === 'ArrowRight')  navigatePanel(1);
+      if (e.key === 'Escape') closePanel();
+      if (e.key === 'ArrowLeft') navigatePanel(-1);
+      if (e.key === 'ArrowRight') navigatePanel(1);
     });
 
     function showMore() { renderGrid(false); }
@@ -859,14 +1169,15 @@
     let searchTimer;
     document.getElementById('search').addEventListener('input', () => {
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(doSearch, 200);
+      searchTimer = setTimeout(doSearch, 220);
     });
     document.getElementById('search').addEventListener('keydown', e => {
       if (e.key === 'Enter') doSearch();
     });
 
     function doSearch() {
-      applyFilters(document.getElementById('search').value.trim().toLowerCase(), dietFilter);
+      const q = safeStr(document.getElementById('search').value).trim().toLowerCase();
+      applyFilters(q, dietFilter);
     }
 
     function setDiet(btn, diet) {
@@ -879,8 +1190,8 @@
     function applyFilters(q, diet) {
       filtered = allDinos.filter(d => {
         const matchQ = !q || [d.name, d.description, d.diet, d.temporalRange, d.locomotionType, d.classificationInfo]
-          .some(v => v && v.toLowerCase().includes(q));
-        const matchD = !diet || (d.diet || '').toLowerCase().includes(diet);
+          .some(v => safeStr(v).toLowerCase().includes(q));
+        const matchD = !diet || safeStr(d.diet).toLowerCase().includes(diet);
         return matchQ && matchD;
       });
       if (currentPanelIdx !== -1) closePanel();
