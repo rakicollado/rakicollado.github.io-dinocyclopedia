@@ -27,7 +27,6 @@
       min-height: 100vh;
     }
 
-    /* ── NAV ── */
     .nav {
       display: flex;
       align-items: center;
@@ -157,11 +156,10 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, .08);
     }
 
-    .card.expanded {
-      transform: none !important;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, .13);
+    .card.active-card {
       border-color: #111;
-      z-index: 2;
+      box-shadow: 0 0 0 2px #111;
+      transform: none;
     }
 
     @keyframes rise {
@@ -251,23 +249,14 @@
       line-height: 1.2
     }
 
-    .card-desc-wrap {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height .35s ease, opacity .3s ease;
-      opacity: 0;
-    }
-
-    .card.expanded .card-desc-wrap {
-      max-height: 500px;
-      opacity: 1;
-    }
-
     .card-desc {
-      font-size: .7rem;
-      color: #555;
-      line-height: 1.6;
-      padding-top: 4px;
+      font-size: .68rem;
+      color: #888;
+      line-height: 1.45;
+      display: -webkit-box;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .card-pills {
@@ -291,84 +280,16 @@
       white-space: nowrap;
     }
 
-    .card-expand-hint {
-      font-size: .6rem;
-      color: #aaa;
+    .card-hint {
+      font-size: .58rem;
+      color: #ccc;
       letter-spacing: .04em;
+      margin-top: 6px;
       display: flex;
       align-items: center;
       gap: 3px;
-      margin-top: 4px;
-      user-select: none;
     }
-
-    .card-expand-hint i {
-      font-size: .75rem;
-      transition: transform .25s;
-    }
-
-    .card.expanded .card-expand-hint i {
-      transform: rotate(180deg);
-    }
-
-    /* In-card prev/next nav (shown when expanded) */
-    .card-nav {
-      display: none;
-      justify-content: space-between;
-      padding: 8px 12px 10px;
-      border-top: 1px solid #eee;
-      margin-top: 4px;
-      gap: 6px;
-    }
-
-    .card.expanded .card-nav {
-      display: flex;
-    }
-
-    .card-nav button {
-      font-family: 'DM Mono', monospace;
-      font-size: .6rem;
-      letter-spacing: .05em;
-      padding: 4px 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background: #fff;
-      color: #111;
-      cursor: pointer;
-      transition: background .12s, border-color .12s;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    .card-nav button:hover:not(:disabled) {
-      background: #111;
-      color: #fff;
-      border-color: #111;
-    }
-
-    .card-nav button:disabled {
-      opacity: .3;
-      cursor: default;
-    }
-
-    .card-attrib {
-      font-size: .58rem;
-      color: #bbb;
-      line-height: 1.5;
-      padding: 0 12px 8px;
-      display: none;
-    }
-
-    .card-attrib a {
-      color: #999;
-    }
-
-    .card.expanded .card-attrib {
-      display: block;
-    }
+    .card-hint i { font-size: .7rem; }
 
     .state {
       display: flex;
@@ -398,15 +319,8 @@
     }
 
     @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: .4
-      }
-
-      50% {
-        opacity: 1
-      }
+      0%, 100% { opacity: .4 }
+      50% { opacity: 1 }
     }
 
     .progress-wrap {
@@ -438,6 +352,7 @@
     #empty i {
       font-size: 2.5rem
     }
+
     .load-more-wrap {
       text-align: center;
       padding: 20px
@@ -460,142 +375,156 @@
       color: #fff;
     }
 
-    .overlay {
+    .panel-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, .55);
+      background: rgba(0,0,0,.45);
       z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      animation: fadein .2s ease;
     }
+    @keyframes fadein { from { opacity: 0 } to { opacity: 1 } }
 
-    .modal {
+    .panel {
+      position: fixed;
+      top: 0; right: 0;
+      width: min(560px, 100vw);
+      height: 100vh;
       background: #fff;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 520px;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 24px;
-      position: relative;
+      z-index: 101;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.4,0,.2,1);
+      box-shadow: -8px 0 48px rgba(0,0,0,.18);
     }
+    .panel.open { transform: translateX(0); }
 
-    .modal-close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      color: #777;
+    /* Panel top bar */
+    .panel-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #eee;
+      flex-shrink: 0;
+      gap: 8px;
     }
-
-    .modal-meta {
+    .panel-counter {
       font-size: .62rem;
       color: #aaa;
-      margin-bottom: 8px;
+      letter-spacing: .04em;
+      min-width: 80px;
+    }
+    .panel-nav-btns {
       display: flex;
-      gap: 10px
+      gap: 6px;
+      margin-left: auto;
     }
-
-    .modal-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.6rem;
-      letter-spacing: -.03em;
-      margin-bottom: 10px
-    }
-
-    .modal-hero {
-      width: 100%;
-      max-height: 220px;
-      object-fit: cover;
-      border-radius: 4px;
-      margin-bottom: 12px
-    }
-
-    .modal-hero-fallback {
-      width: 100%;
-      height: 160px;
-      background: #f5f5f5;
-      border-radius: 4px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ccc;
-    }
-
-    .modal-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-bottom: 12px
-    }
-
-    .modal-pill {
-      font-size: .6rem;
-      letter-spacing: .03em;
-      color: #777;
-      background: #f5f5f5;
-      border-radius: 99px;
-      padding: 3px 9px;
-      border: 1px solid #eee;
-    }
-
-    .modal-desc {
-      font-size: .78rem;
-      color: #333;
-      line-height: 1.75;
-      margin-bottom: 14px
-    }
-
-    .modal-attrib {
-      font-size: .6rem;
-      color: #bbb;
-      line-height: 1.6
-    }
-
-    .modal-attrib a {
-      color: #999
-    }
-
-    .modal-nav {
-      display: flex;
-      gap: 8px;
-      margin-top: 16px;
-      padding-top: 14px;
-      border-top: 1px solid #eee;
-    }
-
-    .modal-nav button {
-      flex: 1;
+    .panel-nav-btn {
       font-family: 'DM Mono', monospace;
-      font-size: .65rem;
+      font-size: .6rem;
       letter-spacing: .05em;
-      padding: 7px 14px;
+      padding: 5px 12px;
       border: 1px solid #ccc;
       border-radius: 4px;
       background: #fff;
+      color: #111;
       cursor: pointer;
       transition: all .12s;
       display: flex;
       align-items: center;
+      gap: 5px;
+    }
+    .panel-nav-btn:hover:not(:disabled) { background: #111; color: #fff; border-color: #111; }
+    .panel-nav-btn:disabled { opacity: .28; cursor: default; }
+
+    .panel-close {
+      width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: none;
+      cursor: pointer;
+      color: #777;
+      font-size: 1rem;
+      transition: all .12s;
+      flex-shrink: 0;
+    }
+    .panel-close:hover { background: #111; color: #fff; border-color: #111; }
+
+    .panel-body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .panel-hero {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+      background: #f5f5f5;
+    }
+    .panel-hero-fallback {
+      width: 100%;
+      height: 200px;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 6px;
+      color: #d0d0d0;
+      font-size: 72px;
     }
-
-    .modal-nav button:hover:not(:disabled) {
-      background: #111;
-      color: #fff;
-      border-color: #111;
+    .panel-content {
+      padding: 24px 24px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
+    .panel-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      letter-spacing: -.03em;
+      line-height: 1.15;
+    }
+    .panel-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .panel-pill {
+      font-size: .62rem;
+      letter-spacing: .03em;
+      color: #555;
+      background: #f5f5f5;
+      border-radius: 99px;
+      padding: 3px 10px;
+      border: 1px solid #e8e8e8;
+    }
+    .panel-pill-C { background: #111; color: #fff; border-color: #111; }
+    .panel-pill-H { background: #fff; color: #111; border-color: #111; }
+    .panel-pill-O { background: #888; color: #fff; border-color: #888; }
+    .panel-divider { height: 1px; background: #f0f0f0; }
+    .panel-desc {
+      font-size: .8rem;
+      color: #333;
+      line-height: 1.82;
+    }
+    .panel-attrib {
+      font-size: .6rem;
+      color: #bbb;
+      line-height: 1.6;
+      padding-top: 8px;
+      border-top: 1px solid #f5f5f5;
+    }
+    .panel-attrib a { color: #999; }
 
-    .modal-nav button:disabled {
-      opacity: .3;
-      cursor: default;
+    @media (max-width: 480px) {
+      .panel { width: 100vw; }
+      .panel-hero { height: 200px; }
+      .panel-name { font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -644,6 +573,25 @@
 
   </div>
 
+  <div class="panel-backdrop" id="backdrop" onclick="closePanel()"></div>
+  <div class="panel" id="panel" role="dialog" aria-modal="true">
+    <div class="panel-header">
+      <span class="panel-counter" id="panel-counter"></span>
+      <div class="panel-nav-btns">
+        <button class="panel-nav-btn" id="btn-prev" onclick="navigatePanel(-1)">
+          <i class="ti ti-arrow-left"></i> Prev
+        </button>
+        <button class="panel-nav-btn" id="btn-next" onclick="navigatePanel(1)">
+          Next <i class="ti ti-arrow-right"></i>
+        </button>
+      </div>
+      <button class="panel-close" onclick="closePanel()" aria-label="Close">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+    <div class="panel-body" id="panel-body"></div>
+  </div>
+
   <script>
     const BASE = 'https://restasaurus.onrender.com/api/v1';
     const PAGE_SIZE = 40;
@@ -652,7 +600,7 @@
     let filtered = [];
     let displayed = 0;
     let dietFilter = '';
-    let expandedIdx = -1;
+    let currentPanelIdx = -1; 
 
     function esc(s) {
       return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -777,7 +725,7 @@
       empty.style.display = 'none';
       grid.style.display = '';
 
-      if (reset) { grid.innerHTML = ''; displayed = 0; expandedIdx = -1; }
+      if (reset) { grid.innerHTML = ''; displayed = 0; currentPanelIdx = -1; }
 
       const slice = filtered.slice(displayed, displayed + PAGE_SIZE);
       const frag = document.createDocumentFragment();
@@ -789,11 +737,10 @@
         const temporal = d.temporalRange || '';
         const loco = d.locomotionType || '';
         const imgUrl = getImageUrl(d);
-        const attrib = buildAttrib(d);
 
         const wrapper = document.createElement('div');
         wrapper.innerHTML = `
-        <div class="card" id="card-${gi}" style="animation-delay:${Math.min(i * 20, 400)}ms" onclick="toggleCard(event,${gi})">
+        <div class="card" id="card-${gi}" style="animation-delay:${Math.min(i * 20, 400)}ms" onclick="openPanel(${absI})">
           <div class="card-img">
             ${imgUrl
             ? `<img src="${esc(imgUrl)}" alt="${esc(d.name)}" loading="lazy"
@@ -807,27 +754,13 @@
           </div>
           <div class="card-body">
             <div class="card-name">${esc(d.name || 'Unknown')}</div>
+            ${d.description ? `<div class="card-desc">${esc(d.description)}</div>` : ''}
             <div class="card-pills">
               ${temporal ? `<span class="pill" title="${esc(temporal)}">${esc(truncatePeriod(temporal))}</span>` : ''}
               ${loco ? `<span class="pill">${esc(loco)}</span>` : ''}
               ${d.diet ? `<span class="pill">${esc(d.diet)}</span>` : ''}
             </div>
-            <div class="card-desc-wrap">
-              <div class="card-desc">${esc(d.description || 'No description available.')}</div>
-            </div>
-            <div class="card-expand-hint">
-              <i class="ti ti-chevron-down"></i>
-              <span class="hint-label">Details</span>
-            </div>
-          </div>
-          ${attrib ? `<div class="card-attrib">${attrib}</div>` : ''}
-          <div class="card-nav">
-            <button id="card-prev-${gi}" onclick="navigateCard(event,${gi},-1)">
-              <i class="ti ti-arrow-left"></i> Prev
-            </button>
-            <button id="card-next-${gi}" onclick="navigateCard(event,${gi},1)">
-              Next <i class="ti ti-arrow-right"></i>
-            </button>
+            <div class="card-hint"><i class="ti ti-arrow-right"></i> View details</div>
           </div>
         </div>`;
         frag.appendChild(wrapper);
@@ -840,84 +773,86 @@
       lmw.style.display = displayed < filtered.length ? '' : 'none';
     }
 
-    function toggleCard(e, gi) {
-      const card = document.getElementById(`card-${gi}`);
-      if (!card) return;
-
-      if (expandedIdx === gi) {
-        // Collapse
-        card.classList.remove('expanded');
-        card.querySelector('.hint-label').textContent = 'Details';
-        expandedIdx = -1;
-      } else {
-        if (expandedIdx !== -1) {
-          const prev = document.getElementById(`card-${expandedIdx}`);
-          if (prev) {
-            prev.classList.remove('expanded');
-            prev.querySelector('.hint-label').textContent = 'Details';
-          }
-        }
-        expandedIdx = gi;
-        card.classList.add('expanded');
-        card.querySelector('.hint-label').textContent = 'Close';
-        updateCardNavButtons(gi);
-        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    function openPanel(fi) {
+      currentPanelIdx = fi;
+      renderPanel(fi);
+      document.getElementById('backdrop').style.display = 'block';
+      requestAnimationFrame(() => document.getElementById('panel').classList.add('open'));
+      document.body.style.overflow = 'hidden';
+      document.querySelectorAll('.card.active-card').forEach(c => c.classList.remove('active-card'));
+      const d = filtered[fi];
+      if (d) {
+        const gi = allDinos.indexOf(d);
+        const card = document.getElementById(`card-${gi}`);
+        if (card) card.classList.add('active-card');
       }
     }
 
-    function updateCardNavButtons(gi) {
-      const filteredPos = filtered.indexOf(allDinos[gi]);
-      const prevBtn = document.getElementById(`card-prev-${gi}`);
-      const nextBtn = document.getElementById(`card-next-${gi}`);
-      if (prevBtn) prevBtn.disabled = filteredPos <= 0;
-      if (nextBtn) nextBtn.disabled = filteredPos >= filtered.length - 1;
+    function closePanel() {
+      document.getElementById('panel').classList.remove('open');
+      setTimeout(() => { document.getElementById('backdrop').style.display = 'none'; }, 280);
+      document.body.style.overflow = '';
+      document.querySelectorAll('.card.active-card').forEach(c => c.classList.remove('active-card'));
+      currentPanelIdx = -1;
     }
 
-    function navigateCard(e, gi, dir) {
-      e.stopPropagation();
-      const filteredPos = filtered.indexOf(allDinos[gi]);
-      const targetPos = filteredPos + dir;
-      if (targetPos < 0 || targetPos >= filtered.length) return;
+    function renderPanel(fi) {
+      const d = filtered[fi];
+      if (!d) return;
 
-      const targetDino = filtered[targetPos];
-      const targetGi = allDinos.indexOf(targetDino);
-      const targetCard = document.getElementById(`card-${targetGi}`);
+      const imgUrl = getImageUrl(d);
+      const dc = dietCode(d.diet);
+      const attrib = buildAttrib(d);
 
-      if (targetCard) {
-        doExpandSwitch(gi, targetGi);
-      } else {
-        loadUntilRendered(targetGi, gi);
+      document.getElementById('panel-counter').textContent =
+        String(fi + 1).padStart(3, '0') + ' / ' + String(filtered.length).padStart(3, '0');
+      document.getElementById('btn-prev').disabled = fi <= 0;
+      document.getElementById('btn-next').disabled = fi >= filtered.length - 1;
+
+      const dietClass = dc ? ` panel-pill-${dc}` : '';
+
+      document.getElementById('panel-body').innerHTML = `
+        ${imgUrl
+          ? `<img class="panel-hero" src="${esc(imgUrl)}" alt="${esc(d.name)}"
+                  onerror="this.outerHTML='<div class=panel-hero-fallback><i class=\\'ti ti-file-unknown\\'></i></div>'">`
+          : `<div class="panel-hero-fallback"><i class="ti ti-file-unknown"></i></div>`}
+        <div class="panel-content">
+          <div class="panel-name">${esc(d.name || 'Unknown')}</div>
+          <div class="panel-pills">
+            ${d.diet          ? `<span class="panel-pill${dietClass}">${esc(d.diet)}</span>` : ''}
+            ${d.temporalRange ? `<span class="panel-pill">${esc(d.temporalRange)}</span>` : ''}
+            ${d.locomotionType? `<span class="panel-pill">${esc(d.locomotionType)}</span>` : ''}
+            ${d.classificationInfo ? `<span class="panel-pill">${esc(d.classificationInfo)}</span>` : ''}
+          </div>
+          <div class="panel-divider"></div>
+          <div class="panel-desc">${esc(d.description || 'No description available.')}</div>
+          ${attrib ? `<div class="panel-attrib">${attrib}</div>` : ''}
+        </div>`;
+
+      document.getElementById('panel-body').scrollTop = 0;
+    }
+
+    function navigatePanel(dir) {
+      const next = currentPanelIdx + dir;
+      if (next < 0 || next >= filtered.length) return;
+      if (next >= displayed) renderGrid(false);
+      currentPanelIdx = next;
+      renderPanel(next);
+      document.querySelectorAll('.card.active-card').forEach(c => c.classList.remove('active-card'));
+      const d = filtered[next];
+      if (d) {
+        const gi = allDinos.indexOf(d);
+        const card = document.getElementById(`card-${gi}`);
+        if (card) { card.classList.add('active-card'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
       }
     }
 
-    function doExpandSwitch(fromGi, toGi) {
-      // Collapse from
-      const fromCard = document.getElementById(`card-${fromGi}`);
-      if (fromCard) {
-        fromCard.classList.remove('expanded');
-        fromCard.querySelector('.hint-label').textContent = 'Details';
-      }
-      expandedIdx = toGi;
-      const toCard = document.getElementById(`card-${toGi}`);
-      if (toCard) {
-        toCard.classList.add('expanded');
-        toCard.querySelector('.hint-label').textContent = 'Close';
-        updateCardNavButtons(toGi);
-        toCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    }
-
-    function loadUntilRendered(targetGi, fromGi) {
-      const check = () => {
-        if (document.getElementById(`card-${targetGi}`)) {
-          doExpandSwitch(fromGi, targetGi);
-        } else if (displayed < filtered.length) {
-          renderGrid(false);
-          requestAnimationFrame(check);
-        }
-      };
-      requestAnimationFrame(check);
-    }
+    document.addEventListener('keydown', e => {
+      if (currentPanelIdx === -1) return;
+      if (e.key === 'Escape')      closePanel();
+      if (e.key === 'ArrowLeft')   navigatePanel(-1);
+      if (e.key === 'ArrowRight')  navigatePanel(1);
+    });
 
     function showMore() { renderGrid(false); }
 
@@ -948,7 +883,7 @@
         const matchD = !diet || (d.diet || '').toLowerCase().includes(diet);
         return matchQ && matchD;
       });
-      expandedIdx = -1;
+      if (currentPanelIdx !== -1) closePanel();
       renderGrid(true);
     }
 
