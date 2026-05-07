@@ -136,6 +136,7 @@
       grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
       gap: 12px;
       padding: 16px;
+      align-items: start;
     }
 
     .card {
@@ -143,7 +144,7 @@
       border-radius: 6px;
       overflow: hidden;
       cursor: pointer;
-      transition: transform .15s, box-shadow .15s, border-color .15s;
+      transition: transform .15s, box-shadow .15s;
       animation: rise .3s ease forwards;
       opacity: 0;
       transform: translateY(8px);
@@ -152,8 +153,7 @@
 
     .card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, .09);
-      border-color: #bbb;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .08);
     }
 
     .card.active-card {
@@ -249,7 +249,7 @@
       line-height: 1.2
     }
 
-    .card-snippet {
+    .card-desc {
       font-size: .68rem;
       color: #888;
       line-height: 1.45;
@@ -289,11 +289,7 @@
       align-items: center;
       gap: 3px;
     }
-
-    .card-hint i {
-      font-size: .7rem;
-    }
-
+    .card-hint i { font-size: .7rem; }
 
     .state {
       display: flex;
@@ -323,15 +319,8 @@
     }
 
     @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: .4
-      }
-
-      50% {
-        opacity: 1
-      }
+      0%, 100% { opacity: .4 }
+      50% { opacity: 1 }
     }
 
     .progress-wrap {
@@ -390,42 +379,28 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, .45);
-      z-index: 200;
+      background: rgba(0,0,0,.45);
+      z-index: 100;
       backdrop-filter: blur(2px);
       -webkit-backdrop-filter: blur(2px);
       animation: fadein .2s ease;
     }
-
-    @keyframes fadein {
-      from {
-        opacity: 0
-      }
-
-      to {
-        opacity: 1
-      }
-    }
+    @keyframes fadein { from { opacity: 0 } to { opacity: 1 } }
 
     .panel {
       position: fixed;
-      top: 0;
-      right: 0;
+      top: 0; right: 0;
       width: min(560px, 100vw);
       height: 100vh;
       background: #fff;
-      z-index: 201;
+      z-index: 101;
       display: flex;
       flex-direction: column;
       transform: translateX(100%);
-      transition: transform .28s cubic-bezier(.4, 0, .2, 1);
-      box-shadow: -8px 0 48px rgba(0, 0, 0, .18);
-      will-change: transform;
+      transition: transform .28s cubic-bezier(.4,0,.2,1);
+      box-shadow: -8px 0 48px rgba(0,0,0,.18);
     }
-
-    .panel.open {
-      transform: translateX(0);
-    }
+    .panel.open { transform: translateX(0); }
 
     .panel-header {
       display: flex;
@@ -435,21 +410,17 @@
       flex-shrink: 0;
       gap: 8px;
     }
-
     .panel-counter {
       font-size: .62rem;
       color: #aaa;
       letter-spacing: .04em;
       min-width: 80px;
     }
-
     .panel-nav-btns {
       display: flex;
       gap: 6px;
-      align-items: center;
       margin-left: auto;
     }
-
     .panel-nav-btn {
       font-family: 'DM Mono', monospace;
       font-size: .6rem;
@@ -465,24 +436,12 @@
       align-items: center;
       gap: 5px;
     }
-
-    .panel-nav-btn:hover:not(:disabled) {
-      background: #111;
-      color: #fff;
-      border-color: #111;
-    }
-
-    .panel-nav-btn:disabled {
-      opacity: .28;
-      cursor: default;
-    }
+    .panel-nav-btn:hover:not(:disabled) { background: #111; color: #fff; border-color: #111; }
+    .panel-nav-btn:disabled { opacity: .28; cursor: default; }
 
     .panel-close {
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
       border: 1px solid #ddd;
       border-radius: 4px;
       background: none;
@@ -492,12 +451,7 @@
       transition: all .12s;
       flex-shrink: 0;
     }
-
-    .panel-close:hover {
-      background: #111;
-      color: #fff;
-      border-color: #111;
-    }
+    .panel-close:hover { background: #111; color: #fff; border-color: #111; }
 
     .panel-body {
       flex: 1;
@@ -512,7 +466,6 @@
       display: block;
       background: #f5f5f5;
     }
-
     .panel-hero-fallback {
       width: 100%;
       height: 200px;
@@ -523,27 +476,23 @@
       color: #d0d0d0;
       font-size: 72px;
     }
-
     .panel-content {
       padding: 24px 24px 40px;
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
-
     .panel-name {
       font-family: 'DM Serif Display', serif;
       font-size: 2rem;
       letter-spacing: -.03em;
       line-height: 1.15;
     }
-
     .panel-pills {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
     }
-
     .panel-pill {
       font-size: .62rem;
       letter-spacing: .03em;
@@ -553,36 +502,15 @@
       padding: 3px 10px;
       border: 1px solid #e8e8e8;
     }
-
-    .panel-pill-C {
-      background: #111;
-      color: #fff;
-      border-color: #111;
-    }
-
-    .panel-pill-H {
-      background: #fff;
-      color: #111;
-      border-color: #111;
-    }
-
-    .panel-pill-O {
-      background: #888;
-      color: #fff;
-      border-color: #888;
-    }
-
-    .panel-divider {
-      height: 1px;
-      background: #f0f0f0;
-    }
-
+    .panel-pill-C { background: #111; color: #fff; border-color: #111; }
+    .panel-pill-H { background: #fff; color: #111; border-color: #111; }
+    .panel-pill-O { background: #888; color: #fff; border-color: #888; }
+    .panel-divider { height: 1px; background: #f0f0f0; }
     .panel-desc {
       font-size: .8rem;
       color: #333;
       line-height: 1.82;
     }
-
     .panel-attrib {
       font-size: .6rem;
       color: #bbb;
@@ -590,23 +518,12 @@
       padding-top: 8px;
       border-top: 1px solid #f5f5f5;
     }
-
-    .panel-attrib a {
-      color: #999;
-    }
+    .panel-attrib a { color: #999; }
 
     @media (max-width: 480px) {
-      .panel {
-        width: 100vw;
-      }
-
-      .panel-hero {
-        height: 200px;
-      }
-
-      .panel-name {
-        font-size: 1.6rem;
-      }
+      .panel { width: 100vw; }
+      .panel-hero { height: 200px; }
+      .panel-name { font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -636,7 +553,7 @@
     <div id="state" class="state">
       <div class="pulse"><i class="ti ti-mood-smile" aria-hidden="true"></i></div>
       <p class="state-title">Loading Dinocyclopedia…</p>
-      <p class="state-sub" id="state-sub">Fetching specimens…</p>
+      <p class="state-sub" id="state-sub">Waking up the server — this may take 15–60 s on first load.</p>
       <div class="progress-wrap">
         <div class="progress-bar" id="progress-bar"></div>
       </div>
@@ -656,7 +573,7 @@
   </div>
 
   <div class="panel-backdrop" id="backdrop" onclick="closePanel()"></div>
-  <div class="panel" id="panel" role="dialog" aria-modal="true" aria-label="Dinosaur details">
+  <div class="panel" id="panel" role="dialog" aria-modal="true">
     <div class="panel-header">
       <span class="panel-counter" id="panel-counter"></span>
       <div class="panel-nav-btns">
@@ -675,46 +592,18 @@
   </div>
 
   <script>
-    const SOURCES = [
-      {
-        url: 'https://raw.githubusercontent.com/vikiru/restasaurus/main/data/dinosaurs.json',
-        parse: d => Array.isArray(d) ? d : (d.dinosaurs || d.data || []),
-        map: d => ({
-          name: d.name, description: d.description, diet: d.diet,
-          temporalRange: d.temporalRange || d.temporalrange,
-          locomotionType: d.locomotionType || d.locomotiontype,
-          classificationInfo: d.classificationInfo, image: d.image, source: d.source
-        })
-      },
-      {
-        url: 'https://raw.githubusercontent.com/vikiru/restasaurus/master/data/dinosaurs.json',
-        parse: d => Array.isArray(d) ? d : (d.dinosaurs || d.data || []),
-        map: d => ({
-          name: d.name, description: d.description, diet: d.diet,
-          temporalRange: d.temporalRange || d.temporalrange,
-          locomotionType: d.locomotionType || d.locomotiontype,
-          classificationInfo: d.classificationInfo, image: d.image, source: d.source
-        })
-      },
-      {
-        url: 'https://dinoapi.brunosouzadev.com/api/dinosaurs',
-        parse: d => Array.isArray(d) ? d : (d.data || []),
-        map: d => ({
-          name: d.name ? d.name[0].toUpperCase() + d.name.slice(1) : '',
-          description: d.description,
-          diet: d.diet ? d.diet[0].toUpperCase() + d.diet.slice(1) : '',
-          temporalRange: d.existed || d.period || '', locomotionType: d.type || '',
-          classificationInfo: d.region ? 'Region: ' + d.region : '',
-          image: d.image || '', source: null
-        })
-      }
-    ];
-
+    const BASE = 'https://restasaurus.onrender.com/api/v1';
     const PAGE_SIZE = 40;
-    let allDinos = [], filtered = [], displayed = 0, dietFilter = '';
+
+    let allDinos = [];
+    let filtered = [];
+    let displayed = 0;
+    let dietFilter = '';
     let currentPanelIdx = -1;
 
-    function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function esc(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
 
     function getImageUrl(d) {
       if (d.image && typeof d.image === 'object' && d.image.imageURL) return d.image.imageURL;
@@ -730,14 +619,18 @@
       return '';
     }
 
-    function truncate(s, n = 28) { return !s ? '' : s.length > n ? s.slice(0, n - 1) + '…' : s; }
+    function truncatePeriod(s, max = 28) {
+      if (!s) return '';
+      return s.length > max ? s.slice(0, max - 1) + '…' : s;
+    }
 
     function buildAttrib(d) {
       let a = '';
       if (d.image && typeof d.image === 'object') {
-        if (d.image.author) a += `Image: ${esc(d.image.author)}`;
-        if (d.image.license) a += ` · ${esc(d.image.license)}`;
-        if (a) a += '. ';
+        const img = d.image;
+        if (img.author) a += `Image: ${esc(img.author)}`;
+        if (img.license) a += ` · ${esc(img.license)}`;
+        if (img.imageURL) a += `. `;
       }
       if (d.source) {
         const src = typeof d.source === 'object' ? d.source : null;
@@ -747,54 +640,69 @@
       return a;
     }
 
-    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-    function setStateSub(txt) { const el = document.getElementById('state-sub'); if (el) el.textContent = txt; }
-
-    async function fetchDinos() {
-      let lastErr;
-      for (let i = 0; i < SOURCES.length; i++) {
+    async function fetchWithRetry(url, retries = 5, delay = 6000) {
+      for (let attempt = 1; attempt <= retries; attempt++) {
         try {
-          const src = SOURCES[i];
-          setStateSub(`Fetching source ${i + 1} of ${SOURCES.length}…`);
-          const bar = document.getElementById('progress-bar');
-          if (bar) bar.style.width = '30%';
-          const r = await fetch(src.url);
-          if (!r.ok) throw new Error(`HTTP ${r.status}`);
-          if (bar) bar.style.width = '70%';
-          const raw = src.parse(await r.json());
-          if (!raw?.length) throw new Error('Empty dataset');
-          if (bar) bar.style.width = '100%';
-          return raw.map(src.map);
+          const r = await fetch(url);
+          if (r.ok) return r;
+          if (attempt < retries) {
+            setStateSub(`Server waking up… retry ${attempt}/${retries}`);
+            await sleep(delay);
+          } else throw new Error(`HTTP ${r.status}`);
         } catch (err) {
-          lastErr = err;
-          console.warn(`Source ${i + 1} failed:`, err.message);
-          if (i < SOURCES.length - 1) { setStateSub(`Source ${i + 1} unavailable, trying next…`); await sleep(300); }
+          if (attempt === retries) throw err;
+          setStateSub(`Connection error, retrying ${attempt}/${retries}…`);
+          await sleep(delay);
         }
       }
-      throw lastErr || new Error('All sources failed');
+    }
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+    function setStateSub(txt) { document.getElementById('state-sub').textContent = txt; }
+
+    async function fetchAllPages() {
+      let page = 1, all = [], totalPages = null, totalDinos = null;
+      const bar = document.getElementById('progress-bar');
+
+      while (true) {
+        const r = await fetchWithRetry(`${BASE}/dinosaurs?page=${page}`);
+        const data = await r.json();
+
+        if (totalPages === null) {
+          totalPages = data.totalPages || null;
+          const cand = data.totalDinosaurs || data.total || null;
+          totalDinos = (cand && cand > 50) ? cand : null;
+        }
+
+        const items = data.dinosaurs || data.data || data.results || [];
+        if (!items.length) break;
+
+        all = all.concat(items);
+        if (totalPages) bar.style.width = Math.round((page / totalPages) * 100) + '%';
+        setStateSub(`Loaded ${all.length}${totalDinos ? ' of ' + totalDinos : ''} specimens…`);
+
+        if (totalPages && page >= totalPages) break;
+        if (!totalPages && items.length < 50) break;
+        page++;
+      }
+
+      bar.style.width = '100%';
+      return all;
     }
 
     async function init() {
-      document.getElementById('state').innerHTML = `
-      <div class="pulse"><i class="ti ti-mood-smile"></i></div>
-      <p class="state-title">Loading Dinocyclopedia\u2026</p>
-      <p class="state-sub" id="state-sub">Fetching specimens\u2026</p>
-      <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>`;
-      document.getElementById('state').style.display = '';
-      document.getElementById('grid').style.display = 'none';
-      document.getElementById('filter-row').style.display = 'none';
-      document.getElementById('empty').style.display = 'none';
       try {
-        const dinos = await fetchDinos();
-        allDinos = dinos.filter(d => d.name).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        const dinos = await fetchAllPages();
+        allDinos = dinos.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
         document.getElementById('state').style.display = 'none';
         document.getElementById('filter-row').style.display = 'flex';
-        filtered = allDinos; displayed = 0;
+        filtered = allDinos;
+        displayed = 0;
         renderGrid(true);
       } catch (err) {
         document.getElementById('state').innerHTML =
           `<p class="state-title">Failed to load</p>
-         <p class="state-sub">${esc(err.message)}<br><br>All sources failed. Check your connection and retry.</p>
+         <p class="state-sub">${esc(err.message)}<br><br>The server may still be waking up — wait 30 s and refresh.</p>
          <button class="load-more" onclick="init()" style="margin-top:12px">Retry</button>`;
       }
     }
@@ -806,40 +714,49 @@
       const count = document.getElementById('count');
 
       if (!filtered.length) {
-        grid.style.display = 'none'; empty.style.display = 'flex';
-        lmw.style.display = 'none'; count.textContent = '0 results'; return;
+        grid.style.display = 'none';
+        empty.style.display = 'flex';
+        lmw.style.display = 'none';
+        count.textContent = '0 results';
+        return;
       }
-      empty.style.display = 'none'; grid.style.display = '';
-      if (reset) { grid.innerHTML = ''; displayed = 0; }
+
+      empty.style.display = 'none';
+      grid.style.display = '';
+
+      if (reset) { grid.innerHTML = ''; displayed = 0; currentPanelIdx = -1; }
 
       const slice = filtered.slice(displayed, displayed + PAGE_SIZE);
       const frag = document.createDocumentFragment();
 
       slice.forEach((d, i) => {
-        const fi = filtered.indexOf(d);
+        const gi = allDinos.indexOf(d);
+        const absI = filtered.indexOf(d);
         const dc = dietCode(d.diet);
+        const temporal = d.temporalRange || '';
+        const loco = d.locomotionType || '';
         const imgUrl = getImageUrl(d);
 
         const wrapper = document.createElement('div');
         wrapper.innerHTML = `
-        <div class="card" id="fcard-${fi}"
-             style="animation-delay:${Math.min(i * 18, 380)}ms"
-             onclick="openPanel(${fi})">
+        <div class="card" id="card-${gi}" style="animation-delay:${Math.min(i * 20, 400)}ms" onclick="openPanel(${absI})">
           <div class="card-img">
-            ${imgUrl ? `<img src="${esc(imgUrl)}" alt="${esc(d.name)}" loading="lazy"
-                          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`: ``}
+            ${imgUrl
+            ? `<img src="${esc(imgUrl)}" alt="${esc(d.name)}" loading="lazy"
+                      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+            : ''}
             <div class="fallback-icon" ${imgUrl ? 'style="display:none"' : ''}>
-              <i class="ti ti-file-unknown"></i>
+              <i class="ti ti-file-unknown" aria-hidden="true"></i>
             </div>
-            <span class="card-num">${String(fi + 1).padStart(3, '0')}</span>
+            <span class="card-num">${String(absI + 1).padStart(3, '0')}</span>
             ${dc ? `<span class="diet-badge diet-${dc}">${dc === 'C' ? 'Carn' : dc === 'H' ? 'Herb' : 'Omni'}</span>` : ''}
           </div>
           <div class="card-body">
             <div class="card-name">${esc(d.name || 'Unknown')}</div>
-            ${d.description ? `<div class="card-snippet">${esc(d.description)}</div>` : ''}
+            ${d.description ? `<div class="card-desc">${esc(d.description)}</div>` : ''}
             <div class="card-pills">
-              ${d.temporalRange ? `<span class="pill" title="${esc(d.temporalRange)}">${esc(truncate(d.temporalRange))}</span>` : ''}
-              ${d.locomotionType ? `<span class="pill">${esc(d.locomotionType)}</span>` : ''}
+              ${temporal ? `<span class="pill" title="${esc(temporal)}">${esc(truncatePeriod(temporal))}</span>` : ''}
+              ${loco ? `<span class="pill">${esc(loco)}</span>` : ''}
               ${d.diet ? `<span class="pill">${esc(d.diet)}</span>` : ''}
             </div>
             <div class="card-hint"><i class="ti ti-arrow-right"></i> View details</div>
@@ -850,11 +767,10 @@
 
       grid.appendChild(frag);
       displayed += slice.length;
+
       count.textContent = filtered.length + ' specimen' + (filtered.length !== 1 ? 's' : '');
       lmw.style.display = displayed < filtered.length ? '' : 'none';
     }
-
-    function showMore() { renderGrid(false); }
 
     function openPanel(fi) {
       currentPanelIdx = fi;
@@ -863,8 +779,12 @@
       requestAnimationFrame(() => document.getElementById('panel').classList.add('open'));
       document.body.style.overflow = 'hidden';
       document.querySelectorAll('.card.active-card').forEach(c => c.classList.remove('active-card'));
-      const card = document.getElementById(`fcard-${fi}`);
-      if (card) card.classList.add('active-card');
+      const d = filtered[fi];
+      if (d) {
+        const gi = allDinos.indexOf(d);
+        const card = document.getElementById(`card-${gi}`);
+        if (card) card.classList.add('active-card');
+      }
     }
 
     function closePanel() {
@@ -876,7 +796,9 @@
     }
 
     function renderPanel(fi) {
-      const d = filtered[fi]; if (!d) return;
+      const d = filtered[fi];
+      if (!d) return;
+
       const imgUrl = getImageUrl(d);
       const dc = dietCode(d.diet);
       const attrib = buildAttrib(d);
@@ -889,22 +811,22 @@
       const dietClass = dc ? ` panel-pill-${dc}` : '';
 
       document.getElementById('panel-body').innerHTML = `
-      ${imgUrl
+        ${imgUrl
           ? `<img class="panel-hero" src="${esc(imgUrl)}" alt="${esc(d.name)}"
-                onerror="this.outerHTML='<div class=panel-hero-fallback><i class=&quot;ti ti-file-unknown&quot;></i></div>'">`
+                  onerror="this.outerHTML='<div class=panel-hero-fallback><i class=\\'ti ti-file-unknown\\'></i></div>'">`
           : `<div class="panel-hero-fallback"><i class="ti ti-file-unknown"></i></div>`}
-      <div class="panel-content">
-        <div class="panel-name">${esc(d.name || 'Unknown')}</div>
-        <div class="panel-pills">
-          ${d.diet ? `<span class="panel-pill${dietClass}">${esc(d.diet)}</span>` : ''}
-          ${d.temporalRange ? `<span class="panel-pill">${esc(d.temporalRange)}</span>` : ''}
-          ${d.locomotionType ? `<span class="panel-pill">${esc(d.locomotionType)}</span>` : ''}
-          ${d.classificationInfo ? `<span class="panel-pill">${esc(d.classificationInfo)}</span>` : ''}
-        </div>
-        <div class="panel-divider"></div>
-        <div class="panel-desc">${esc(d.description || 'No description available.')}</div>
-        ${attrib ? `<div class="panel-attrib">${attrib}</div>` : ''}
-      </div>`;
+        <div class="panel-content">
+          <div class="panel-name">${esc(d.name || 'Unknown')}</div>
+          <div class="panel-pills">
+            ${d.diet          ? `<span class="panel-pill${dietClass}">${esc(d.diet)}</span>` : ''}
+            ${d.temporalRange ? `<span class="panel-pill">${esc(d.temporalRange)}</span>` : ''}
+            ${d.locomotionType? `<span class="panel-pill">${esc(d.locomotionType)}</span>` : ''}
+            ${d.classificationInfo ? `<span class="panel-pill">${esc(d.classificationInfo)}</span>` : ''}
+          </div>
+          <div class="panel-divider"></div>
+          <div class="panel-desc">${esc(d.description || 'No description available.')}</div>
+          ${attrib ? `<div class="panel-attrib">${attrib}</div>` : ''}
+        </div>`;
 
       document.getElementById('panel-body').scrollTop = 0;
     }
@@ -912,28 +834,41 @@
     function navigatePanel(dir) {
       const next = currentPanelIdx + dir;
       if (next < 0 || next >= filtered.length) return;
-      if (!document.getElementById(`fcard-${next}`) && next >= displayed) renderGrid(false);
+      // ensure the card is rendered so we can highlight it
+      if (next >= displayed) renderGrid(false);
       currentPanelIdx = next;
       renderPanel(next);
+      // update active-card highlight
       document.querySelectorAll('.card.active-card').forEach(c => c.classList.remove('active-card'));
-      const card = document.getElementById(`fcard-${next}`);
-      if (card) { card.classList.add('active-card'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+      const d = filtered[next];
+      if (d) {
+        const gi = allDinos.indexOf(d);
+        const card = document.getElementById(`card-${gi}`);
+        if (card) { card.classList.add('active-card'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+      }
     }
 
     document.addEventListener('keydown', e => {
       if (currentPanelIdx === -1) return;
-      if (e.key === 'Escape') closePanel();
-      if (e.key === 'ArrowLeft') navigatePanel(-1);
-      if (e.key === 'ArrowRight') navigatePanel(1);
+      if (e.key === 'Escape')      closePanel();
+      if (e.key === 'ArrowLeft')   navigatePanel(-1);
+      if (e.key === 'ArrowRight')  navigatePanel(1);
     });
+
+    function showMore() { renderGrid(false); }
 
     let searchTimer;
     document.getElementById('search').addEventListener('input', () => {
-      clearTimeout(searchTimer); searchTimer = setTimeout(doSearch, 200);
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(doSearch, 200);
     });
-    document.getElementById('search').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+    document.getElementById('search').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doSearch();
+    });
 
-    function doSearch() { applyFilters(document.getElementById('search').value.trim().toLowerCase(), dietFilter); }
+    function doSearch() {
+      applyFilters(document.getElementById('search').value.trim().toLowerCase(), dietFilter);
+    }
 
     function setDiet(btn, diet) {
       dietFilter = diet;
