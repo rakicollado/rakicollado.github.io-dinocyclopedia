@@ -291,7 +291,6 @@ body::before {
     box-shadow: var(--glass-shadow);
     display: flex;
     flex-direction: column;
-    height: 320px;
 }
 
 .card:hover {
@@ -417,8 +416,6 @@ body::before {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    flex: 1;
-    min-height: 0;
     overflow: hidden;
 }
 
@@ -450,7 +447,7 @@ body::before {
     display: flex;
     flex-wrap: wrap;
     gap: 3px;
-    margin-top: auto;
+    margin-top: 4px;
 }
 
 .pill {
@@ -982,7 +979,6 @@ body::before {
 
     .card {
         height: auto;
-        min-height: 260px;
     }
 
     .card-img {
